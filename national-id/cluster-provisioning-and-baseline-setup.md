@@ -250,5 +250,3 @@ Before proceeding to **Ingress & Istio / Platform Installation**, confirm:
 * [ ] `rke up` completed successfully (no failed hosts)
 * [ ] `kubectl get nodes` shows all nodes in `Ready` state
 * [ ] RKE artifacts are stored securely (`cluster.yml`, `cluster.rkestate`, kubeconfig)
-
-***
