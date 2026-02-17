@@ -8,37 +8,71 @@ This page describes **where components are deployed, how we secure administrativ
 
 We use a **two-cluster model**:
 
-* **Observation Cluster**: hosts operational tooling (e.g., Rancher UI, ops IAM) used to manage and observe Kubernetes.
+* **Observation Cluster**: hosts operational tooling (cluster management, ops dashboards, ops IAM).
 * **MOSIP Cluster**: hosts MOSIP platform workloads and MOSIP-facing endpoints.
 
-**Why**: separating operations tooling from the mission workload reduces blast radius (ops tools changes don’t impact MOSIP runtime), simplifies access policy (ops endpoints stay private), and keeps the MOSIP cluster focused on platform runtime + integrations.
+{% hint style="info" %}
+**Why two clusters?**\
+Keeping “operations” components separate from “mission” components reduces blast radius, allows tighter network policy for admin tools, and prevents ops UI upgrades/changes from impacting MOSIP runtime.
+{% endhint %}
 
 ***
 
-### 2. High-level architecture
+### 2. Logical architecture
 
-#### 2.1 Components (logical)
+#### 2.1 Core components
 
-* **WireGuard Bastion** (admin VPN): private, authenticated tunnel for admins and deployment automation.
-  * **Why**: WireGuard provides a modern, secure VPN tunnel with a small attack surface and is well-suited to tightly controlled administrative access.
-  * Reference: WireGuard overview. (See public documentation.)
-* **Observation Cluster (Kubernetes via RKE)**:
-  * **Rancher** (cluster management UI)
-    * **Why**: Rancher simplifies multi-cluster Kubernetes lifecycle management (import/monitor/operate clusters centrally).
-    * Reference: Rancher “What is Rancher?” documentation.
-  * **Keycloak (ops IAM)** (optional / if used for ops)
-    * **Why**: centralizes admin authentication/authorization for ops dashboards and reduces shared credentials.
-  * **Nginx (Observation LB / reverse proxy)** for private TLS termination and routing.
-    * **Why**: stable, auditable entry point for private admin UIs; supports TLS termination and consistent routing rules.
-* **MOSIP Cluster (Kubernetes via RKE)**:
-  * **Istio Ingress Gateways** (internal + external)
-    * **Why**: The Istio Gateway provides controlled edge ingress to the mesh and allows us to apply consistent policies and routing for MOSIP services.
-    * Reference: Istio Gateway / Ingress docs.
-  * **Nginx (MOSIP LB / reverse proxy)** in front of Istio
-    * **Why**: provides TLS termination strategy, domain-level exposure policy (private vs public), and stable load-balancing in on-prem/cloud environments.
-  * **Storage (NFS + client provisioner)** for persistent volumes
-    * **Why**: provides a practical shared storage backend for on-prem clusters, enabling PV provisioning for stateful workloads.
-  * **MOSIP platform modules & external dependencies** (installed via scripts/Helm).
+1. **WireGuard Bastion (Admin VPN)**
+   * Provides secure private access from admin machines into private subnets.
+   * Reference: WireGuard Quick Start — https://www.wireguard.com/quickstart/
+
+{% hint style="info" %}
+**Why WireGuard?**\
+WireGuard is a modern VPN designed to be simpler and easier to audit than many alternatives, making it suitable for tightly controlled administrative access into private environments.
+{% endhint %}
+
+2.  **Observation Cluster (Kubernetes)**
+
+    * **Rancher** (cluster management UI)
+    * **Ops IAM** (e.g., Keycloak) for admin authentication (if used)
+    * **Private Ingress** (nginx-ingress) for private dashboards
+
+    References:
+
+    * RKE1 docs (Rancher) — https://rke.docs.rancher.com/installation
+    * ingress-nginx (official GitHub) — https://github.com/kubernetes/ingress-nginx
+
+{% hint style="info" %}
+**Why Rancher/Observation tooling?**\
+A centralized cluster management plane reduces operational friction (access, monitoring, node lifecycle, kubeconfig management) and improves auditability. Keeping it private reduces exposure.
+{% endhint %}
+
+3.  **MOSIP Cluster (Kubernetes)**
+
+    * **Istio gateways** for controlled ingress into MOSIP services
+    * **MOSIP Nginx LB / reverse proxy** (VM-based) for stable edge routing and TLS termination
+    * **Persistent storage** via NFS (server VM + client provisioner) for stateful workloads where required
+
+    References:
+
+    * Istio: Install with istioctl — https://istio.io/latest/docs/setup/install/istioctl/
+    * NGINX Documentation — https://docs.nginx.com/
+    * NFS subdir external provisioner (kubernetes-sigs) — https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
+
+{% hint style="info" %}
+**Why Istio gateways?**\
+Gateways provide explicit, policy-driven ingress control (routing and isolation between internal and external endpoints) and a clean separation between exposure (Gateways) and routing rules (VirtualServices).
+{% endhint %}
+
+{% hint style="info" %}
+**Why a VM-based Nginx LB in front?**\
+In on‑prem or hybrid setups, a VM-based reverse proxy can be the simplest stable “edge” to manage DNS, TLS certificates, allowlists, and exposure policy in one place, independent of cluster churn.
+{% endhint %}
+
+{% hint style="info" %}
+**Why NFS for PVs?**\
+NFS is a pragmatic shared storage backend for on‑prem Kubernetes when you need ReadWriteMany-style storage without a full distributed storage platform.
+{% endhint %}
 
 ***
 
@@ -48,37 +82,40 @@ We use a **two-cluster model**:
 
 * **Admin Zone**: admin laptops / CI runners
 * **Bastion Zone**: WireGuard VM (public IP) + admin jump access
-* **Private Cluster Zone**: Observation cluster nodes, MOSIP cluster nodes, Nginx LBs, NFS VM(s)
+* **Private Cluster Zone**: Observation & MOSIP cluster nodes, private LBs, NFS VM(s)
 * **Public Zone**: only selected MOSIP endpoints that must be internet-accessible
 
-#### 3.2 Access rules (baseline)
+#### 3.2 Baseline access rules
 
-* **All private dashboards and internal APIs** are accessible **only via WireGuard** (or a strict admin CIDR allowlist).
-* **Public endpoints** must be protected using:
-  * TLS
-  * WAF / rate limiting (where available)
-  * IP allowlisting for partner APIs when possible
+* **Private endpoints** (Rancher, ops IAM, `admin.*`, `api-internal.*`, internal dashboards) are reachable **only via WireGuard** and/or a strict **admin CIDR allowlist**.
+* **Public endpoints** (e.g., `api.<env>.<domain>`, `resident.<env>.<domain>` if in scope) must be protected with:
+  * TLS (strong ciphers)
+  * WAF / rate limits (where available)
+  * IP allowlisting for partner APIs when feasible
+
+{% hint style="info" %}
+**Why “VPN first” for admin surfaces?**\
+Admin UIs expose privileged operations and sensitive data paths. Keeping them off the public internet significantly reduces the attack surface and simplifies compliance controls.
+{% endhint %}
 
 ***
 
 ### 4. Traffic flow
 
-#### 4.1 Administrative access flow (private)
+#### 4.1 Administrative access (private)
 
 ```mermaid
 flowchart LR
   A[Admin Laptop] -->|WireGuard VPN| B[WireGuard Bastion]
   B -->|Private routing| C[Observation Nginx / LB]
   C --> D[Rancher UI]
-  C --> E[Ops IAM / Keycloak]
+  C --> E[Ops IAM (e.g., Keycloak)]
   B -->|Private routing| F[MOSIP Nginx / LB (Private)]
   F --> G[Istio IngressGateway - internal]
   G --> H[MOSIP Internal Services]
 ```
 
-**Why this flow**: VPN-first access ensures admin-only surfaces (Rancher, Keycloak, admin portals, internal APIs) are not exposed to the internet.
-
-#### 4.2 Public MOSIP access flow (only if required)
+#### 4.2 Public MOSIP access (only if required)
 
 ```mermaid
 flowchart LR
@@ -87,100 +124,79 @@ flowchart LR
   Q --> R[MOSIP Public Services]
 ```
 
-**Why this flow**: the MOSIP Nginx LB is the single controlled edge; Istio then governs routing within the cluster.
-
 ***
 
-### 5. Cluster topology (on-prem reference)
+### 5. Cluster provisioning model (RKE)
 
-#### 5.1 RKE-based Kubernetes clusters
+We provision both clusters using **RKE**.
 
-Both clusters are created using **RKE** (Rancher Kubernetes Engine).
+Reference: RKE1 docs (Rancher) — https://rke.docs.rancher.com/installation
 
-* **Why**: RKE simplifies Kubernetes installation and automation on bare-metal/VMs and is commonly used for on-prem deployments.\
-  Reference: RKE overview documentation.
+{% hint style="info" %}
+**Why RKE?**\
+RKE provides a repeatable approach to bringing up Kubernetes on VMs/bare-metal using Docker as the runtime. It’s often used in on‑prem contexts where kubeadm-managed lifecycle or managed Kubernetes isn’t available.
+{% endhint %}
 
-**Observation cluster key commands**
-
-Create the RKE cluster configuration:
+#### 5.1 Observation cluster bootstrap (commands)
 
 ```bash
 rke config
-```
-
-Edit the generated `cluster.yml`:
-
-```bash
 vi cluster.yml
-```
-
-Disable default ingress installation:
-
-```yaml
-ingress:
-  provider: none
-```
-
-Bring up the cluster:
-
-```bash
 rke up
 ```
 
-Set kubeconfig (either option):
+Set kubeconfig:
 
 ```bash
 cp $HOME/.kube/<cluster_name>_config $HOME/.kube/config
-```
-
-```bash
+# OR
 export KUBECONFIG="$HOME/.kube/<cluster_name>_config"
 ```
 
-Verify cluster access:
+Validate:
 
 ```bash
 kubectl get nodes
 ```
 
-Save these files securely (needed for maintenance/upgrades):
+Operational files to retain securely:
 
 * `cluster.yml`
-* `kube_config_cluster.yml`
+* `kube_config_cluster.yml` (or your generated kubeconfig)
 * `cluster.rkestate`
 
 ***
 
-### 6. Ingress and edge routing strategy
+### 6. Ingress and edge routing
 
-#### 6.1 Observation cluster ingress (nginx-ingress)
+#### 6.1 Observation cluster ingress (ingress-nginx)
 
-We deploy `ingress-nginx` in the Observation cluster to expose internal tools behind a consistent ingress layer.
+References:
 
-* **Why**: `ingress-nginx` provides a standard Kubernetes ingress controller for private admin UIs and can integrate cleanly with a VM-based reverse proxy/LB.
+* ingress-nginx (official GitHub) — https://github.com/kubernetes/ingress-nginx
+* Ingress examples: https://kubernetes.github.io/ingress-nginx/examples/
 
-Commands:
+{% hint style="info" %}
+**Why ingress-nginx for Observation?**\
+It provides a standard Kubernetes ingress controller for private dashboards, allowing consistent routing and TLS policies for ops tools.
+{% endhint %}
 
 ```bash
 cd $K8_ROOT/rancher/on-prem
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
-helm install \
-  ingress-nginx ingress-nginx/ingress-nginx \
-  --namespace ingress-nginx \
-  --version 4.0.18 \
-  --create-namespace \
-  -f ingress-nginx.values.yaml
+helm install   ingress-nginx ingress-nginx/ingress-nginx   --namespace ingress-nginx   --version 4.0.18   --create-namespace   -f ingress-nginx.values.yaml
 kubectl get all -n ingress-nginx
 ```
 
 #### 6.2 MOSIP cluster ingress (Istio)
 
-We install Istio components (including ingress gateways) on the MOSIP cluster.
+Reference: Istio: Install with istioctl — https://istio.io/latest/docs/setup/install/istioctl/
 
-* **Why**: Istio gateways provide policy-driven, explicit ingress control and a clean separation between _port exposure_ (Gateway) and _routing rules_ (VirtualServices).
-
-Commands:
+{% hint style="info" %}
+**Why Istio on the MOSIP cluster?**\
+It centralizes ingress and service-to-service policy enforcement while giving operators strong troubleshooting and traffic-management primitives.
+{% endhint %}
 
 ```bash
 cd $K8_ROOT/mosip/on-prem/istio
@@ -188,32 +204,25 @@ cd $K8_ROOT/mosip/on-prem/istio
 kubectl get svc -n istio-system
 ```
 
-Expected services include (names may vary by installation scripts):
-
-* `istio-ingressgateway` (external)
-* `istio-ingressgateway-internal` (internal)
-* `istiod`
-
 ***
 
 ### 7. Persistent storage (NFS)
 
-We use an NFS server VM + NFS client provisioner for dynamic PV provisioning.
+References:
 
-* **Why**: NFS is a pragmatic shared storage layer for on-prem Kubernetes deployments and supports multiple pods accessing shared volumes where needed.
+* NFS subdir external provisioner (kubernetes-sigs) — https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
+* Helm repo: https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 
-#### 7.1 NFS server setup (on NFS VM)
+{% hint style="info" %}
+**Why NFS + external provisioner?**\
+This pattern enables dynamic provisioning of Kubernetes Persistent Volumes using an existing NFS server, reducing manual PV creation overhead.
+{% endhint %}
 
-Prepare Ansible inventory:
+#### 7.1 NFS server (on NFS VM)
 
 ```bash
 cd $K8_ROOT/mosip/nfs
 cp hosts.ini.sample hosts.ini
-```
-
-SSH and install:
-
-```bash
 ssh -i ~/.ssh/nfs-ssh.pem ubuntu@<internal ip of nfs server>
 git clone https://github.com/mosip/k8s-infra -b v1.2.0.1
 cd /home/ubuntu/k8s-infra/mosip/nfs/
@@ -225,14 +234,14 @@ When prompted:
 * Environment name: `<envName>`
 * NFS path: `/srv/nfs/mosip/<envName>`
 
-#### 7.2 NFS client provisioner (run from bastion)
+#### 7.2 NFS client provisioner (from bastion)
 
 ```bash
 cd $K8_ROOT/mosip/nfs/
 ./install-nfs-client-provisioner.sh
 ```
 
-Post-checks:
+Verify:
 
 ```bash
 kubectl -n nfs get deployment.apps/nfs-client-provisioner
@@ -241,41 +250,36 @@ kubectl get storageclass
 
 ***
 
-### 8. DNS and endpoint exposure model
+### 8. DNS and exposure model
 
-You already defined your **DNS mapping table** on the Pre-requisites page. In topology terms:
+In topology terms:
 
 * **Observation DNS** → points to **Observation Nginx/LB private IP**
 * **MOSIP Private DNS** → points to **MOSIP Nginx/LB private IP**
 * **MOSIP Public DNS (only if required)** → points to **MOSIP Nginx/LB public IP**
 
-**Why**: clean separation of admin/private endpoints vs internet-facing endpoints makes it easy to enforce policies and audit exposure.
+{% hint style="info" %}
+**Why strict separation of private vs public FQDNs?**\
+It makes exposure policy enforceable, easier to audit, and reduces accidental publication of internal dashboards and APIs.
+{% endhint %}
 
 ***
 
-### 9. Nginx LBs (VM-based reverse proxies)
+### 9. Connectivity validation (edge → cluster)
 
-We run VM-based Nginx as the stable edge:
+We deploy an `httpbin` utility to validate ingress routing and environment headers.
 
-* **Observation Nginx**: terminates TLS for Rancher/Keycloak; maps domains like `rancher.<domain>` and `keycloak.<domain>`
-* **MOSIP Nginx**: terminates TLS and routes domains (private + public) into Istio gateways
-
-**Why**: a VM-based LB is often simpler to operate in on-prem environments, supports certificate management workflows, and provides a single, auditable place to enforce exposure policy.
-
-***
-
-### 10. Connectivity validation (Nginx ↔ Istio wiring)
-
-Use the `httpbin` utility to confirm request flow from domains into the cluster and validate header propagation.
-
-Install httpbin:
+{% hint style="info" %}
+**Why httpbin?**\
+It’s a simple echo service that helps validate routing, TLS termination, headers, and query/path behavior without depending on MOSIP app readiness.
+{% endhint %}
 
 ```bash
 cd $K8_ROOT/utils/httpbin
 ./install.sh
 ```
 
-Test internal and public paths (replace with your domains):
+Test (replace with your FQDNs):
 
 ```bash
 curl https://api.<env>.<domain>/httpbin/get?show_env=true
@@ -283,12 +287,3 @@ curl https://api-internal.<env>.<domain>/httpbin/get?show_env=true
 ```
 
 ***
-
-### 11. What should be ready before you proceed to the next page
-
-* WireGuard tunnel operational for admins
-* Observation cluster created and reachable (`kubectl get nodes`)
-* MOSIP cluster created and reachable (`kubectl get nodes`)
-* Ingress strategy installed (nginx-ingress for Observation; Istio for MOSIP)
-* NFS storage class available (if used)
-* DNS records planned and created for private vs public exposure
