@@ -1,5 +1,3 @@
-# Home
-
 <h2 align="center">What pode we help you find?</h2>
 
 <p align="center">Browse the topics below, or use the GitBook assistant to ask for help with anything you need.</p>
