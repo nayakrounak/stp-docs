@@ -8,12 +8,6 @@ description: >-
 
 This page describes **where components are deployed, how we secure administrative access, and how DNS and ingress** routes traffic across the **Observation** and **MOSIP** Kubernetes clusters for São Tomé & Príncipe (STP).
 
-## Related pages
-
-* Architecture: [Architecture](architecture.md)
-* Platform prerequisites: [Platform Pre-requisites](platform-pre-requisites.md)
-* Ingress & routing: [Ingress & Edge Routing Setup](ingress-and-edge-routing-setup.md)
-
 ***
 
 ### 1. Why this topology
