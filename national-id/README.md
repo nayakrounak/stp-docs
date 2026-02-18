@@ -1,80 +1,80 @@
 ---
 description: >-
-  Documentação de implementação e operação do Programa de Identificação Nacional de STP
-  using MOSIP.
+  Documentação de implementação e operação do Programa de Identificação Nacional
+  de STP using MOSIP.
 ---
 
-# Nacional ID
+# Identificação Nacional
 
-Este GitBook disponibiliza a documentação de implementação e de operação do programa de Identificação Nacional em São Tomé e Príncipe (STP), utilizando o **MOSIP** como plataforma base de Identificação Nacional. Destina-se a orientar as partes interessadas do Governo, os integradores de sistemas e as equipas de operações ao longo da configuração ponta-a-ponta — desde a preparação do ambiente e a implementação da plataforma base até ao implementação gradual do registo, integração (quando aplicável), entrada em produção (go‑live) e operações contínuas.
+Este GitBook disponibiliza a documentação de implementação e de disponibilização (deployment) do programa de Identificação Nacional em São Tomé e Príncipe (STP), utilizando o **MOSIP** como plataforma base (fundacional) de Identificação Nacional. Destina-se a orientar stakeholders do Governo, integradores de sistemas e equipas de operações ao longo de toda a configuração ponta‑a‑ponta — desde a preparação do ambiente e a disponibilização do núcleo da plataforma até ao rollout do registo/enrolamento, à integração com ABIS, à entrada em produção (go‑live) e às operações contínuas.
 
-### Purpose of this Documentação
+#### Finalidade desta documentação
 
-This documentação aims para:
+Esta documentação visa:
 
-* Provide a clear, repeatable approach para deploying MOSIP across **DEV / SIT / UAT / PRE-PROD / PROD / DR** ambientes
-* Establish common standards para **segurança, configuration management, monitorização, cópias de segurança, e desastre recuperação**
-* Define how **registo locais** are prepared e rolled out, including dispositivo prontidão e field support procedures
-* Document integration touchpoints (e.g., ABIS, CRVS/civil registry, messaging gateways, e other government systems as applicable)
-* Support a controlled **entrada em produção e handover**, com prontidão gates, cutover steps, rollback plans, e hypercare
+* Fornecer uma abordagem clara e repetível para disponibilizar o MOSIP nos ambientes **DEV / SIT / UAT / PRE‑PROD / PROD / DR**
+* Estabelecer normas comuns para **segurança, gestão de configuração, monitorização, backup e recuperação de desastre**
+* Definir como os **postos de enrolamento** são preparados e colocados em funcionamento, incluindo prontidão dos dispositivos e procedimentos de suporte em campo
+* Documentar pontos de integração (por exemplo, ABIS, CRVS/registo civil, gateways de mensageria e outros sistemas governamentais, conforme aplicável)
+* Suportar um **go‑live e handover** controlados, com gates de prontidão, passos de cutover, planos de rollback e período de hypercare
 
-### Solution Visão geral (High-Level)
+#### Visão geral da solução (alto nível)
 
-A solução de Identificação Nacional assenta no MOSIP e inclui:
+A solução de Identificação Nacional é centrada no MOSIP e inclui:
 
-* **Enrollment & Registration**: operator-led registo utilizando registration clients e MOSIP-compliant devices
-* **Packet Processing & Workflow**: backend processing, validação, e adjudication of registo packets
-* **Deduplication**: Deduplication utilizando integration com the Civil Registry System in Sao Tome & Principe.
-* **Identity Repository**: secure storage of identity records e supporting artifacts under strict acesso controls
-* **Credential Issuance**: issuance of nacional identification credentials (physical e/ou digital, depending on scope)
-* **Authentication & Verification (as applicable)**: standards-based authentication e verification services para approved relying parties, including público verification modules where required
+* **Enrolamento e Registo**: enrolamento conduzido por operador através de clientes de registo e dispositivos compatíveis com MOSIP
+* **Processamento de Pacotes e Workflow**: processamento backend, validação e adjudicação dos pacotes de enrolamento
+* **Desduplicação**: desduplicação através de integração com o Sistema de Registo Civil em São Tomé e Príncipe
+* **Repositório de Identidade**: armazenamento seguro de registos de identidade e artefactos de suporte sob controlos de acesso rigorosos
+* **Emissão de Credenciais**: emissão de credenciais de identificação nacional (físicas e/ou digitais, dependendo do âmbito)
+* **Autenticação e Verificação (quando aplicável)**: serviços de autenticação e verificação baseados em standards para entidades relying parties aprovadas, incluindo módulos públicos de verificação quando necessário
 
-### Implementação Principles
+#### Princípios de disponibilização
 
-The implementação follows these principles:
+A implementação segue estes princípios:
 
-* **Segurança by design**: least privilege acesso, encryption in transit e at rest, strong auditoria trails, e controlled admin acesso
-* **Repeatable deployments**: infrastructure e plataforma configuração are versionado e reproduzível across ambientes
-* **Operational prontidão**: monitorização, alertas, runbooks, backups, e DR plans are part of the base implementação—not an afterthought
-* **Scalable implementação gradual**: registo is introduced via pilots e phased expansion com site prontidão e acceptance criteria
+* **Segurança por conceção**: acesso com privilégio mínimo, encriptação em trânsito e em repouso, trilhos de auditoria robustos e acesso administrativo controlado
+* **Disponibilizações repetíveis**: a infraestrutura e a configuração da plataforma são versionadas e reproduzíveis entre ambientes
+* **Prontidão operacional**: monitorização, alertas, runbooks, backups e planos de DR fazem parte da base — não são um complemento posterior
+* **Rollout escalável**: o enrolamento é introduzido através de pilotos e expansão faseada, com prontidão do posto e critérios de aceitação
 
-### Intended Audience
+#### Público-alvo
 
-This GitBook is destina-se para:
+Este GitBook destina-se a:
 
-* Government programa leadership e technical governance equipas
-* Nacional ID IT administrators e infrastructure equipas
-* System integrator implementação e engineering equipas
+* Liderança do programa e equipas de governação técnica do Governo
+* Administradores de TI e equipas de infraestrutura da Identificação Nacional
+* Equipas de deployment e engenharia do integrador de sistemas
 * Equipas de segurança, auditoria e conformidade
-* Operations e support equipas (NOC / helpdesk / L2 / L3)
+* Equipas de operações e suporte (NOC / helpdesk / L2 / L3)
 
-### How para Utilize This GitBook
+#### Como utilizar este GitBook
 
-* Comece por **Arquitetura** para compreender a topologia de implementação e os principais blocos do MOSIP
-* Utilize **Plataforma Pré-requisitos** before provisioning ambientes
-* Siga **Implementação Base do MOSIP** e **Integrações** para orientações de instalação passo a passo
-* Utilize **Registo e Implementação no Terreno** para prontidão dos locais, configuração de dispositivos e procedimentos operacionais
-* Refer para **Operations, Backup & DR** para day-2 activities e business continuity
-* Utilize **Go-Live & Handover** checklists para run a controlled cutover e transition para steady-state operações
+* Comece por **Arquitetura** para compreender a topologia de implementação e os principais building blocks do MOSIP
+* Utilize **pré‑requisitos da Plataforma** antes de provisionar os ambientes
+* Siga **Implementação MOSIP (Core)** e **Integrações** para orientação de instalação passo‑a‑passo
+* Utilize **Enrolamento e Rollout em Campo** para prontidão do posto, configuração de dispositivos e procedimentos operacionais
+* Consulte **Operações, Backup e DR** para atividades de day‑2 e continuidade de negócio
+* Utilize checklists de **Go‑Live e Handover** para executar um cutover controlado e transitar para operações em regime permanente
 
-### In Scope (This Documentação)
+#### No âmbito (desta documentação)
 
-* Environment configuração e MOSIP implementação (all ambientes)
-* Configuration e secrets management approach
-* External System integration, implementação, e validação
-* Enrollment implementação gradual playbook e prontidão checklists
-* Monitoring, logging, cópias de segurança/restore, e DR runbooks
-* Go-live, rollback, hypercare, e handover
+* Preparação do ambiente e disponibilização do MOSIP (todos os ambientes)
+* Abordagem de gestão de configuração e secrets
+* Integração com sistemas externos, disponibilização e validação
+* Playbook de rollout de enrolamento e checklists de prontidão
+* Runbooks de monitorização, logging, backup/restore e DR
+* Go‑live, rollback, hypercare e handover
 
-### Out of Scope (Unless Explicitly Added)
+#### Fora do âmbito (salvo inclusão explícita)
 
-* Procurement of registo hardware e rede equipment
-* Mobile dispositivo management (MDM) para government phones
-* Non-Nacional ID systems are not integrated as part of the programa scope
-* Custom application development beyond agreed integrations e extensions
+* Aquisição de hardware de enrolamento e equipamentos de rede
+* Mobile Device Management (MDM) para telemóveis do Governo
+* Sistemas não pertencentes à Identificação Nacional não são integrados como parte do âmbito do programa
+* Desenvolvimento de aplicações customizadas para além das integrações e extensões acordadas
 
-### Document Ownership e Change Control
+#### Propriedade do documento e controlo de alterações
 
-Este GitBook é mantido conjuntamente pelo **Integrador de Sistemas — Ooru Digital Private Limited** e pelos **responsáveis técnicos do Governo de São Tomé e Príncipe — INIC e DGRN**. Serve como referência oficial para a arquitetura de implementação, procedimentos de instalação, bases de segurança, integrações e runbooks operacionais da implementação de Identificação Nacional.
+Este GitBook é mantido conjuntamente pelo **Integrador de Sistemas — Ooru Digital Private Limited** — e pelos **responsáveis técnicos do Governo de São Tomé e Príncipe — INIC e DGRN**. Serve como referência oficial para a arquitetura de implementação, os procedimentos de instalação, as bases de segurança, as integrações e os runbooks operacionais da implementação de Identificação Nacional.
 
 Quaisquer alterações que afetem **procedimentos de implementação em produção**, **controlos de segurança**, **interfaces de integração**, **tratamento de dados** ou **runbooks de operações/DR** devem seguir o **processo de gestão de mudanças** acordado. Essas alterações devem ser **revistas**, **avaliadas quanto ao risco** e **formalmente aprovadas** pelos responsáveis técnicos designados (INIC/DGRN) e pelo Integrador de Sistemas (Ooru Digital) **antes** de serem adotadas em produção.
