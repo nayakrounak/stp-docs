@@ -1,6 +1,17 @@
+---
+title: Architecture
+description: Target architecture and key flows for STP National ID using MOSIP, including SIGA and Immigration integrations.
+---
+
 # Architecture
 
 This section describes the target architecture for the National ID implementation in São Tomé & Príncipe (STP) using **MOSIP** as the foundational platform. It covers the logical building blocks, environment topology, network zoning, and the primary end-to-end flows for enrollment, processing, issuance, and verification—along with integrations with **SIGA** and **Immigration**.
+
+## Related pages
+
+- Deployment topology: [Deployment Topology & Network Plan](./deployment-topology-and-network-plan.md)
+
+- Platform prerequisites: [Platform Pre-requisites](./platform-pre-requisites.md)
 
 ***
 
@@ -238,3 +249,8 @@ For both SIGA and Immigration integrations:
 * **Scalability:** horizontal scaling for stateless services; capacity planning for data services
 * **Performance:** monitored p95 latency for key APIs and processing throughput targets
 * **Operability:** dashboards, runbooks, alerts, and maintenance processes
+
+---
+## Navigation
+- **Previous:** [National ID](./README.md)
+- **Next:** [Deployment Topology & Network Plan](./deployment-topology-and-network-plan.md)

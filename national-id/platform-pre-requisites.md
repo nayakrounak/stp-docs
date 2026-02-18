@@ -1,6 +1,17 @@
+---
+title: Platform Pre-requisites
+description: Minimum prerequisites to prepare infrastructure, access, DNS, and tooling before MOSIP deployment.
+---
+
 # Platform Pre-requisites
 
 This section lists the minimum prerequisites required before starting the MOSIP deployment for São Tomé & Príncipe (STP). It includes the **bastion host toolchain**, **baseline VM sizing**, **DNS planning**, and **secure access setup (WireGuard + SSH hygiene)**.
+
+## Related pages
+
+- Deployment topology: [Deployment Topology & Network Plan](./deployment-topology-and-network-plan.md)
+
+- Cluster provisioning: [Cluster Provisioning & Baseline Setup](./cluster-provisioning-and-baseline-setup.md)
 
 {% hint style="info" %}
 #### Before You Start
@@ -35,7 +46,7 @@ A bastion provides a single hardened entry-point for administrative access, tool
 
 {% hint style="info" %}
 **Why Git?**\
-We use Git to version-control infrastructure scripts, Helm chart values, and deployment configs, enabling repeatable deployments, peer review, and traceability. ([git-scm.com](https://git-scm.com/?utm_source=chatgpt.com))
+We use Git to version-control infrastructure scripts, Helm chart values, and deployment configs, enabling repeatable deployments, peer review, and traceability. ([git-scm.com](https://git-scm.com/))
 {% endhint %}
 
 ```bash
@@ -62,7 +73,7 @@ export INFRA_ROOT=$MOSIP_ROOT/mosip-infra
 
 {% hint style="info" %}
 **Why kubectl?**\
-`kubectl` is the standard command-line tool to interact with Kubernetes clusters (deployments, logs, troubleshooting). We use it to validate cluster state and operate MOSIP workloads. ([kubernetes.io](https://kubernetes.io/docs/tasks/tools/?utm_source=chatgpt.com))
+`kubectl` is the standard command-line tool to interact with Kubernetes clusters (deployments, logs, troubleshooting). We use it to validate cluster state and operate MOSIP workloads. ([kubernetes.io](https://kubernetes.io/docs/tasks/tools/))
 {% endhint %}
 
 ```bash
@@ -76,7 +87,7 @@ kubectl version --client
 
 {% hint style="info" %}
 **Why istioctl?**\
-When Istio is used for service mesh capabilities (traffic management, security policies, diagnostics), `istioctl` is the recommended tool for installation, configuration validation, and troubleshooting. ([istio.io](https://istio.io/latest/docs/ops/diagnostic-tools/istioctl/?utm_source=chatgpt.com))
+When Istio is used for service mesh capabilities (traffic management, security policies, diagnostics), `istioctl` is the recommended tool for installation, configuration validation, and troubleshooting. ([istio.io](https://istio.io/latest/docs/ops/diagnostic-tools/istioctl/))
 {% endhint %}
 
 ```bash
@@ -90,7 +101,7 @@ istioctl version --remote=false
 
 {% hint style="warning" %}
 **Why RKE (and an important note):**\
-RKE is a Kubernetes cluster provisioning tool that simplifies on-premises cluster creation. However, RKE1 has reached end of life; new deployments should consider RKE2 (or another supported Kubernetes distribution) unless there is a project constraint to remain on RKE1 for compatibility. ([github.com](https://github.com/rancher/rke?utm_source=chatgpt.com))
+RKE is a Kubernetes cluster provisioning tool that simplifies on-premises cluster creation. However, RKE1 has reached end of life; new deployments should consider RKE2 (or another supported Kubernetes distribution) unless there is a project constraint to remain on RKE1 for compatibility. ([github.com](https://github.com/rancher/rke))
 {% endhint %}
 
 ```bash
@@ -104,7 +115,7 @@ rke --version
 
 {% hint style="info" %}
 **Why Helm?**\
-MOSIP services are packaged as Helm charts to standardize installation and upgrades on Kubernetes. Helm helps manage complex applications with versioned, repeatable deployments. ([helm.sh](https://helm.sh/docs/?utm_source=chatgpt.com))
+MOSIP services are packaged as Helm charts to standardize installation and upgrades on Kubernetes. Helm helps manage complex applications with versioned, repeatable deployments. ([helm.sh](https://helm.sh/docs/))
 {% endhint %}
 
 ```bash
@@ -119,7 +130,7 @@ helm repo add mosip https://mosip.github.io/mosip-helm
 
 {% hint style="info" %}
 **Why Ansible?**\
-We use Ansible to automate repeatable server configuration tasks (e.g., installing Docker, disabling swap, and baseline node hardening). This reduces manual errors across multiple VMs. ([docs.ansible.com](https://docs.ansible.com/projects/ansible/latest/installation_guide/intro_installation.html?utm_source=chatgpt.com))
+We use Ansible to automate repeatable server configuration tasks (e.g., installing Docker, disabling swap, and baseline node hardening). This reduces manual errors across multiple VMs. ([docs.ansible.com](https://docs.ansible.com/projects/ansible/latest/installation_guide/intro_installation.html))
 {% endhint %}
 
 ```bash
@@ -133,7 +144,7 @@ sudo apt install ansible -y
 
 {% hint style="info" %}
 **Why MOSIP k8s-infra?**\
-The `k8s-infra` repository provides reference architecture and scripts to deploy Kubernetes-based clusters and supporting infrastructure for MOSIP (and related DPG components). ([github.com](https://github.com/mosip/k8s-infra?utm_source=chatgpt.com))
+The `k8s-infra` repository provides reference architecture and scripts to deploy Kubernetes-based clusters and supporting infrastructure for MOSIP (and related DPG components). ([github.com](https://github.com/mosip/k8s-infra))
 {% endhint %}
 
 ```bash
@@ -148,7 +159,7 @@ All VMs referenced in this guide assume Ubuntu 22.04 as the standard OS image.
 
 {% hint style="info" %}
 **Why Ubuntu 22.04 LTS?**\
-Ubuntu LTS releases provide long-term maintenance and security updates, which is important for stable government infrastructure. ([discourse.ubuntu.com](https://discourse.ubuntu.com/t/jammy-jellyfish-release-notes/24668?utm_source=chatgpt.com))
+Ubuntu LTS releases provide long-term maintenance and security updates, which is important for stable government infrastructure. ([discourse.ubuntu.com](https://discourse.ubuntu.com/t/jammy-jellyfish-release-notes/24668))
 {% endhint %}
 
 ***
@@ -159,7 +170,7 @@ Ubuntu LTS releases provide long-term maintenance and security updates, which is
 
 {% hint style="info" %}
 **Why separate Observation vs MOSIP clusters?**\
-Separating the **Observation/management** components (e.g., cluster management and ops IAM) from the main MOSIP application cluster reduces risk and avoids management tooling impacting MOSIP runtime performance. MOSIP’s on-prem guidance also reflects an observation cluster concept for installing ingress/storage and supporting apps. ([docs.mosip.io](https://docs.mosip.io/1.2.0/setup/deploymentnew/v3-installation/on-prem-installation-guidelines?utm_source=chatgpt.com))
+Separating the **Observation/management** components (e.g., cluster management and ops IAM) from the main MOSIP application cluster reduces risk and avoids management tooling impacting MOSIP runtime performance. MOSIP’s on-prem guidance also reflects an observation cluster concept for installing ingress/storage and supporting apps. ([docs.mosip.io](https://docs.mosip.io/1.2.0/setup/deploymentnew/v3-installation/on-prem-installation-guidelines))
 {% endhint %}
 
 <table data-header-hidden><thead><tr><th></th><th width="80.0859375"></th><th width="79.921875"></th><th width="86.94921875"></th><th width="87.140625"></th><th width="137.48046875"></th><th></th></tr></thead><tbody><tr><td><strong>Purpose</strong></td><td><strong>vCPU</strong></td><td><strong>RAM</strong></td><td><strong>Storage</strong></td><td><strong># VMs</strong></td><td><strong>HA</strong></td><td><strong>OS</strong></td></tr><tr><td>WireGuard Bastion Host</td><td>2</td><td>4 GB</td><td>8 GB</td><td>1</td><td>Active-Passive</td><td>Ubuntu 22.04</td></tr><tr><td>Observation Cluster nodes</td><td>2</td><td>8 GB</td><td>32 GB</td><td>2</td><td>2</td><td>Ubuntu 22.04</td></tr><tr><td>Observation Nginx / LB</td><td>2</td><td>4 GB</td><td>16 GB</td><td>1</td><td>Nginx+</td><td>Ubuntu 22.04</td></tr><tr><td>MOSIP Cluster nodes</td><td>12</td><td>32 GB</td><td>128 GB</td><td>6</td><td>6</td><td>Ubuntu 22.04</td></tr><tr><td>MOSIP Nginx / LB</td><td>2</td><td>4 GB</td><td>16 GB</td><td>1</td><td>Nginx+</td><td>Ubuntu 22.04</td></tr></tbody></table>
@@ -175,7 +186,7 @@ MOSIP deployments require DNS records mapped to:
 
 {% hint style="info" %}
 **Why DNS and stable FQDNs?**\
-Stable hostnames simplify TLS certificate management, client configuration (e.g., registration clients), and operational runbooks. MOSIP Helm-based deployments assume consistent endpoint URLs across environments. ([docs.mosip.io](https://docs.mosip.io/1.2.0/setup/deploymentnew/getting-started/helm-charts?utm_source=chatgpt.com))
+Stable hostnames simplify TLS certificate management, client configuration (e.g., registration clients), and operational runbooks. MOSIP Helm-based deployments assume consistent endpoint URLs across environments. ([docs.mosip.io](https://docs.mosip.io/1.2.0/setup/deploymentnew/getting-started/helm-charts))
 {% endhint %}
 
 #### 4.1 DNS Table
@@ -217,7 +228,7 @@ chmod 400 ~/.ssh/<your private key>
 
 {% hint style="info" %}
 **Why WireGuard?**\
-WireGuard is a modern VPN designed to be simpler and high-performance. We use it to provide secure private access to internal dashboards and APIs without exposing them publicly. ([wireguard.com](https://www.wireguard.com/quickstart/?utm_source=chatgpt.com))
+WireGuard is a modern VPN designed to be simpler and high-performance. We use it to provide secure private access to internal dashboards and APIs without exposing them publicly. ([wireguard.com](https://www.wireguard.com/quickstart/))
 {% endhint %}
 
 * WireGuard server listens on UDP 51820
@@ -256,7 +267,7 @@ ansible-playbook -i hosts.ini docker.yaml
 
 {% hint style="info" %}
 **Why the linuxserver/wireguard container?**\
-It provides a widely used, repeatable containerized WireGuard setup, simplifying deployment and upgrades compared to manual server configuration. ([hub.docker.com](https://hub.docker.com/r/linuxserver/wireguard?utm_source=chatgpt.com))
+It provides a widely used, repeatable containerized WireGuard setup, simplifying deployment and upgrades compared to manual server configuration. ([hub.docker.com](https://hub.docker.com/r/linuxserver/wireguard))
 {% endhint %}
 
 ```bash
@@ -271,7 +282,7 @@ sudo docker run -d   --name=wireguard   --cap-add=NET_ADMIN   --cap-add=SYS_MODU
 
 {% hint style="info" %}
 **Why an Observation cluster?**\
-This cluster typically hosts platform management and supporting services (e.g., Rancher, ops IAM), helping keep operational tooling isolated from the MOSIP runtime. MOSIP on-prem guidance references preparing a Rancher/observation cluster with ingress/storage for supporting applications. ([docs.mosip.io](https://docs.mosip.io/1.2.0/setup/deploymentnew/v3-installation/on-prem-installation-guidelines?utm_source=chatgpt.com))
+This cluster typically hosts platform management and supporting services (e.g., Rancher, ops IAM), helping keep operational tooling isolated from the MOSIP runtime. MOSIP on-prem guidance references preparing a Rancher/observation cluster with ingress/storage for supporting applications. ([docs.mosip.io](https://docs.mosip.io/1.2.0/setup/deploymentnew/v3-installation/on-prem-installation-guidelines))
 {% endhint %}
 
 #### 7.1 Set up passwordless SSH (optional)
@@ -330,8 +341,8 @@ ansible-playbook -i hosts.ini docker.yaml
 
 {% hint style="info" %}
 **Why does Rancher / Keycloak appear in the DNS list?**\
-Rancher is commonly used to manage Kubernetes clusters and provide a central operations UI. ([ranchermanager.docs.rancher.com](https://ranchermanager.docs.rancher.com/?utm_source=chatgpt.com))\
-Keycloak provides IAM capabilities (login, administration, RBAC integration patterns) and is widely used for managing access to administrative services. ([keycloak.org](https://www.keycloak.org/docs/latest/server_admin/index.html?utm_source=chatgpt.com))
+Rancher is commonly used to manage Kubernetes clusters and provide a central operations UI. ([ranchermanager.docs.rancher.com](https://ranchermanager.docs.rancher.com/))\
+Keycloak provides IAM capabilities (login, administration, RBAC integration patterns) and is widely used for managing access to administrative services. ([keycloak.org](https://www.keycloak.org/docs/latest/server_admin/index.html))
 {% endhint %}
 
 Generate cluster.yml using RKE:
@@ -350,7 +361,7 @@ rke config
 
 {% hint style="info" %}
 **Why do these gates matter?**\
-Most MOSIP deployment failures come from missing baseline dependencies (DNS/TLS, networking, cluster readiness, and access controls). Completing these prerequisites reduces rework and stabilizes the environment promotion. ([docs.mosip.io](https://docs.mosip.io/1.2.0/readme/overview?utm_source=chatgpt.com))
+Most MOSIP deployment failures come from missing baseline dependencies (DNS/TLS, networking, cluster readiness, and access controls). Completing these prerequisites reduces rework and stabilizes the environment promotion. ([docs.mosip.io](https://docs.mosip.io/1.2.0/readme/overview))
 {% endhint %}
 
 * Bastion host has Git, kubectl, istioctl, RKE, Helm, and Ansible installed
@@ -359,3 +370,8 @@ Most MOSIP deployment failures come from missing baseline dependencies (DNS/TLS,
 * VMs provisioned as per baseline sizing (or approved updated sizing)
 * DNS records planned for observation + MOSIP clusters (public and private)
 * WireGuard UDP 51820 opened (VM + firewall) and SSH key permissions hardened
+
+---
+## Navigation
+- **Previous:** [Deployment Topology & Network Plan](./deployment-topology-and-network-plan.md)
+- **Next:** [Cluster Provisioning & Baseline Setup](./cluster-provisioning-and-baseline-setup.md)

@@ -1,6 +1,23 @@
+---
+title: National ID
+description: Implementation and deployment documentation for the STP National ID program using MOSIP.
+---
+
 # National ID
 
 This GitBook provides the implementation and deployment documentation for the National ID program in São Tomé & Príncipe (STP), using **MOSIP** as the foundational National ID platform. It is intended to guide government stakeholders, system integrators, and operations teams through the end-to-end setup—from environment preparation and core platform deployment to enrollment rollout, ABIS integration, go-live, and ongoing operations.
+
+## Related pages
+
+- Start here: [Architecture](./architecture.md)
+
+- Prepare environment: [Platform Pre-requisites](./platform-pre-requisites.md)
+
+- Build clusters: [Cluster Provisioning & Baseline Setup](./cluster-provisioning-and-baseline-setup.md)
+
+- Route traffic: [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)
+
+- Install MOSIP: [MOSIP Platform Installation](./mosip-platform-installation.md)
 
 ### Purpose of this Documentation
 
@@ -70,3 +87,7 @@ This GitBook is intended for:
 ### Document Ownership and Change Control
 
 This GitBook is maintained by the implementation team in coordination with the designated government technical owners. Changes to production deployment procedures, security controls, and operational runbooks should follow the agreed change management process and must be reviewed and approved before adoption in production.
+
+---
+## Navigation
+- **Next:** [Architecture](./architecture.md)

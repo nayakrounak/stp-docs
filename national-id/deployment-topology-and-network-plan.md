@@ -1,6 +1,19 @@
+---
+title: Deployment Topology & Network Plan
+description: Deployment topology, network zones, DNS, and traffic flows across Observation and MOSIP clusters.
+---
+
 # Deployment Topology & Network Plan
 
 This page describes **where components are deployed, how we secure administrative access, and how DNS and ingress** routes traffic across the **Observation** and **MOSIP** Kubernetes clusters for São Tomé & Príncipe (STP).
+
+## Related pages
+
+- Architecture: [Architecture](./architecture.md)
+
+- Platform prerequisites: [Platform Pre-requisites](./platform-pre-requisites.md)
+
+- Ingress & routing: [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)
 
 ***
 
@@ -287,3 +300,8 @@ curl https://api-internal.<env>.<domain>/httpbin/get?show_env=true
 ```
 
 ***
+
+---
+## Navigation
+- **Previous:** [Architecture](./architecture.md)
+- **Next:** [Platform Pre-requisites](./platform-pre-requisites.md)

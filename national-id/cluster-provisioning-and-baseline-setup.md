@@ -1,6 +1,17 @@
+---
+title: Cluster Provisioning & Baseline Setup
+description: Provision Observation and MOSIP Kubernetes clusters using RKE with a hardened baseline.
+---
+
 # Cluster Provisioning & Baseline Setup
 
 This page covers the **end-to-end provisioning steps** to bring up the **Observation Kubernetes cluster** and the **MOSIP Kubernetes cluster** for São Tomé & Príncipe (STP), using **RKE**, with a hardened baseline (swap off, Docker installed, SSH hygiene), and clear **validation gates** before moving to ingress / Istio / MOSIP Helm installs.
+
+## Related pages
+
+- Platform prerequisites: [Platform Pre-requisites](./platform-pre-requisites.md)
+
+- Ingress & routing: [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)
 
 ***
 
@@ -250,3 +261,8 @@ Before proceeding to **Ingress & Istio / Platform Installation**, confirm:
 * [ ] `rke up` completed successfully (no failed hosts)
 * [ ] `kubectl get nodes` shows all nodes in `Ready` state
 * [ ] RKE artifacts are stored securely (`cluster.yml`, `cluster.rkestate`, kubeconfig)
+
+---
+## Navigation
+- **Previous:** [Platform Pre-requisites](./platform-pre-requisites.md)
+- **Next:** [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)
