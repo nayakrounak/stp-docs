@@ -6,8 +6,6 @@ description: >-
 
 # Provisionamento do Cluster e Configuração de Base
 
-## Provisionamento do Cluster e Configuração Base
-
 Esta página cobre os **passos ponta-a-ponta de provisionamento** para colocar em funcionamento o **cluster Kubernetes de Observação** e o **cluster Kubernetes do MOSIP** para São Tomé e Príncipe (STP), utilizando **RKE**, com uma baseline endurecida (swap desativado, Docker instalado, higiene de SSH) e **gates de validação** claros antes de avançar para ingress / Istio / instalações via Helm do MOSIP.
 
 ***
