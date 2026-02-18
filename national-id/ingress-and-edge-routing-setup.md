@@ -1,52 +1,52 @@
 ---
 description: >-
-  Configurar ingress e encaminhamento na periferia (ingress-nginx + gateways Istio) e
-  validate routing using httpbin.
+  Configurar ingress e encaminhamento na periferia (ingress-nginx + gateways
+  Istio) e validate routing using httpbin.
 ---
 
-# Ingress & Edge Routing Configuração
+# Configuração de Ingress e Encaminhamento na Periferia
 
-This página explains how we expose **privado admin ferramentas** (Observation cluster) e **MOSIP plataforma endpoints** (MOSIP cluster) utilizando a layered approach:
-
-***
-
-### 0. Pré-requisitos (from anterior pages)
-
-* Observation cluster is **Ready** (`kubectl get nodes`)
-* MOSIP cluster is **Ready** (`kubectl get nodes`)
-* DNS plano exists (privado vs público FQDNs)
-* WireGuard acesso is working para admins
+Esta página explica como expomos **ferramentas administrativas privadas** (cluster de Observação) e **endpoints da plataforma MOSIP** (cluster MOSIP) usando uma abordagem em camadas.
 
 ***
 
-### 1. Porquê do we need an ingress layer
+### 0. Pré-requisitos (das páginas anteriores)
+
+* O cluster de Observação está **Ready** (`kubectl get nodes`)
+* O cluster MOSIP está **Ready** (`kubectl get nodes`)
+* Existe um plano de DNS (FQDNs privados vs públicos)
+* O acesso via WireGuard está a funcionar para administradores
+
+***
+
+### 1. Porque precisamos de uma camada de ingress
 
 {% hint style="info" %}
-**Porquê ingress at all?**\
-Ingress disponibiliza a consistent way para route HTTP(S) tráfego into Kubernetes services utilizando hostnames e paths, e makes it easier para standardize TLS e acesso policy.
+**Porquê ingress?**\
+O ingress fornece uma forma consistente de encaminhar tráfego HTTP(S) para serviços em Kubernetes usando hostnames e paths, e facilita a padronização de TLS e políticas de acesso.
 
-**References:**
+**Referências:**
 
-* Kubernetes Ingress concept: https://kubernetes.io/docs/concepts/services-networking/ingress/
+* Conceito de Ingress no Kubernetes: [https://kubernetes.io/docs/concepts/services-networking/ingress/](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 {% endhint %}
 
 ***
 
-### 2. Observation Cluster Ingress (ingress-nginx)
+### 2. Ingress no Cluster de Observação (ingress-nginx)
 
-Este passo instala o controlador `ingress-nginx` no cluster de **Observação** para expor ferramentas internas (por exemplo, Rancher UI) através de DNS privado e política de acesso privada.
+Este passo instala o controlador `ingress-nginx` no cluster de **Observação** para expor ferramentas internas (por exemplo, Rancher UI) via DNS privado e política de acesso privada.
 
 {% hint style="info" %}
-**Porquê ingress-nginx here?**\
-It’s the most widely used Kubernetes ingress controller, com strong community support e clear operacional patterns para privado dashboards.
+**Porquê ingress-nginx aqui?**\
+É o controlador de ingress mais utilizado em Kubernetes, com forte suporte da comunidade e padrões operacionais claros para dashboards privados.
 
-**References:**
+**Referências:**
 
-* ingress-nginx (official): https://github.com/kubernetes/ingress-nginx
-* Helm chart docs: https://kubernetes.github.io/ingress-nginx/
+* ingress-nginx (oficial): [https://github.com/kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx)
+* Documentação do Helm chart: [https://kubernetes.github.io/ingress-nginx/](https://kubernetes.github.io/ingress-nginx/)
 {% endhint %}
 
-#### 2.1 Instalar ingress-nginx (Observation cluster)
+#### 2.1 Instalar ingress-nginx (cluster de Observação)
 
 ```bash
 cd $K8_ROOT/rancher/on-prem
@@ -56,35 +56,35 @@ helm install   ingress-nginx ingress-nginx/ingress-nginx   --namespace ingress-n
 kubectl get all -n ingress-nginx
 ```
 
-#### 2.2 Validation checks
+#### 2.2 Verificações de validação
 
 ```bash
 kubectl get pods -n ingress-nginx
 kubectl get svc -n ingress-nginx
 ```
 
-Expected:
+Esperado:
 
-* Controller pods are `Running`
-* O serviço tem o tipo esperado (ClusterIP/NodePort/LoadBalancer) com base no seu ficheiro de values
+* Pods do controlador em estado `Running`
+* O Service tem o tipo esperado (ClusterIP/NodePort/LoadBalancer) de acordo com o seu ficheiro de valores
 
 ***
 
-### 3. MOSIP Cluster Ingress (Istio gateways)
+### 3. Ingress no Cluster MOSIP (Gateways Istio)
 
-MOSIP routing is controlled through **Istio ingress gateways** (internal e external), e then routed para services utilizando Istio resources (Gateway/VirtualService), while exposure policy is enforced at the MOSIP LB.
+O routing do MOSIP é controlado através de **Istio ingress gateways** (interno e externo) e depois encaminhado para serviços usando recursos do Istio (Gateway/VirtualService), enquanto a política de exposição é aplicada no LB do MOSIP.
 
 {% hint style="info" %}
-**Porquê Istio gateways on the MOSIP cluster?**\
-Gateways provide explicit control over what is exposed e allow consistent tráfego management patterns (host-based routing, canary, header-based routing), com strong tooling para troubleshooting.
+**Porquê gateways Istio no cluster MOSIP?**\
+Os gateways fornecem controlo explícito sobre o que é exposto e permitem padrões consistentes de gestão de tráfego (routing por hostname, canary, routing por headers), com ferramentas fortes para troubleshooting.
 
-**References:**
+**Referências:**
 
-* Istio instalar: https://istio.io/latest/docs/setup/install/
-* Istio ingress/gateway docs: https://istio.io/latest/docs/tasks/traffic-management/ingress/
+* Instalação do Istio: [https://istio.io/latest/docs/setup/install/](https://istio.io/latest/docs/setup/install/)
+* Ingress/Gateway no Istio: [https://istio.io/latest/docs/tasks/traffic-management/ingress/](https://istio.io/latest/docs/tasks/traffic-management/ingress/)
 {% endhint %}
 
-#### 3.1 Instalar Istio on the MOSIP cluster
+#### 3.1 Instalar Istio no cluster MOSIP
 
 ```bash
 cd $K8_ROOT/mosip/on-prem/istio
@@ -92,62 +92,62 @@ cd $K8_ROOT/mosip/on-prem/istio
 kubectl get svc -n istio-system
 ```
 
-#### 3.2 Validation checks
+#### 3.2 Verificações de validação
 
 ```bash
 kubectl get pods -n istio-system
 kubectl get svc -n istio-system
 ```
 
-Expected:
+Esperado:
 
-* `istiod` is Running
-* Ingress gateway services exist (internal e/ou external, depending on your instalar)
-
-***
-
-### 4. Edge LBs (VM-based Nginx) e TLS strategy
-
-We usar VM-based Nginx as a stable, auditable edge para:
-
-* TLS termination
-* IP allowlists/exposure policy
-* Mapping DNS (FQDNs) para internal gateway services
-
-{% hint style="info" %}
-**Porquê VM-based Nginx at the edge?**\
-On-prem ambientes often need a predictable “front door” that is independent of the cluster lifecycle. Nginx disponibiliza a proven reverse proxy pattern para TLS termination e routing.
-
-**Reference:** https://docs.nginx.com/
-{% endhint %}
-
-> **Note:** Nginx configuration files e certificate management (ACME/PKI) deverá be documented in a dedicated “TLS & Certificates” página.
-
-{% hint style="info" %}
-**TLS management reference (optional):**\
-If you manage certificates inside Kubernetes, `cert-manager` is the common standard.\
-Reference: https://cert-manager.io/docs/
-{% endhint %}
+* `istiod` em estado `Running`
+* Serviços de ingress gateway existentes (interno e/ou externo, conforme a instalação)
 
 ***
 
-### 5. Connectivity validação utilizando httpbin
+### 4. LBs de Edge (Nginx em VM) e estratégia de TLS
 
-We deploy `httpbin` para confirm that ingress routing works **before** validating MOSIP modules.
+Usamos Nginx em VM como _edge_ estável e auditável para:
+
+* Terminação de TLS
+* Allowlists de IP / política de exposição
+* Mapear DNS (FQDNs) para serviços internos de gateway
+
+{% hint style="info" %}
+**Porquê Nginx em VM no edge?**\
+Em ambientes on‑prem, muitas vezes é necessário um “front door” previsível e independente do ciclo de vida do cluster. O Nginx fornece um padrão comprovado de reverse proxy para terminação TLS e routing.
+
+**Referência:** [https://docs.nginx.com/](https://docs.nginx.com/)
+{% endhint %}
+
+> **Nota:** Ficheiros de configuração do Nginx e gestão de certificados (ACME/PKI) devem ser documentados numa página dedicada de “TLS e Certificados”.
+
+{% hint style="info" %}
+**Referência opcional para gestão de TLS:**\
+Se gerir certificados dentro do Kubernetes, o `cert-manager` é o standard mais comum.\
+Referência: [https://cert-manager.io/docs/](https://cert-manager.io/docs/)
+{% endhint %}
+
+***
+
+### 5. Validação de conectividade com httpbin
+
+Implementamos `httpbin` para confirmar que o routing de ingress funciona **antes** de validar módulos MOSIP.
 
 {% hint style="info" %}
 **Porquê httpbin?**\
-It’s a lightweight echo service used para validate DNS → LB → ingress routing, TLS behavior, headers, e path rules without waiting para full application prontidão.
+É um serviço leve de “echo” usado para validar DNS → LB → ingress routing, comportamento TLS, headers e regras de path sem depender da prontidão completa da aplicação.
 {% endhint %}
 
-#### 5.1 Instalar httpbin (utility)
+#### 5.1 Instalar httpbin (utilitário)
 
 ```bash
 cd $K8_ROOT/utils/httpbin
 ./install.sh
 ```
 
-#### 5.2 Test routing (replace com your domains)
+#### 5.2 Testar routing (substitua pelos seus domínios)
 
 ```bash
 curl https://api.<env>.<domain>/httpbin/get?show_env=true
@@ -156,12 +156,12 @@ curl https://api-internal.<env>.<domain>/httpbin/get?show_env=true
 
 ***
 
-### 6. Definition of Done (DoD)
+### 6. Definição de Pronto (DoD)
 
-Antes proceeding para “MOSIP plataforma instalação”:
+Antes de avançar para “instalação da plataforma MOSIP”:
 
-* [ ] `ingress-nginx` is installed e healthy on the Observation cluster
-* [ ] Istio is installed e healthy on the MOSIP cluster
-* [ ] DNS records resolve correctly para the right LB IPs
-* [ ] `httpbin` tests succeed para both público (if applicable) e internal routes
-* [ ] Admin endpoints are reachable only via WireGuard / allowlist
+* [ ] `ingress-nginx` está instalado e saudável no cluster de Observação
+* [ ] Istio está instalado e saudável no cluster MOSIP
+* [ ] Registos DNS resolvem corretamente para os IPs de LB certos
+* [ ] Testes `httpbin` têm sucesso para rotas públicas (se aplicável) e internas
+* [ ] Endpoints administrativos são acessíveis apenas via WireGuard / allowlist
