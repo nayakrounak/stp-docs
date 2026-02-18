@@ -1,17 +1,13 @@
 ---
 title: Architecture
-description: Target architecture and key flows for STP National ID using MOSIP, including SIGA and Immigration integrations.
+description: >-
+  Target architecture and key flows for STP's National ID using MOSIP, including
+  SIGA and Immigration integrations.
 ---
 
 # Architecture
 
 This section describes the target architecture for the National ID implementation in São Tomé & Príncipe (STP) using **MOSIP** as the foundational platform. It covers the logical building blocks, environment topology, network zoning, and the primary end-to-end flows for enrollment, processing, issuance, and verification—along with integrations with **SIGA** and **Immigration**.
-
-## Related pages
-
-- Deployment topology: [Deployment Topology & Network Plan](./deployment-topology-and-network-plan.md)
-
-- Platform prerequisites: [Platform Pre-requisites](./platform-pre-requisites.md)
 
 ***
 
@@ -76,18 +72,11 @@ Depending on the scope:
 
 ***
 
-### 3) Environment Topology
+### 3. Environment Topology
 
 MOSIP is deployed across multiple environments to support safe release management:
 
-| Environment | Purpose             | Data Type         | Notes                                    |
-| ----------- | ------------------- | ----------------- | ---------------------------------------- |
-| DEV         | Development         | Synthetic         | SI-only                                  |
-| SIT         | Integration Testing | Synthetic/masked  | Includes SIGA/Immigration test endpoints |
-| UAT         | Business Validation | Masked/controlled | UAT users and acceptance tests           |
-| PRE-PROD    | Dress Rehearsal     | Masked subset     | Production-like topology                 |
-| PROD        | Live Operations     | Real              | Audited & change-controlled              |
-| DR          | Failover            | Real replica      | Restricted access                        |
+<table><thead><tr><th width="140.15234375">Environment</th><th>Purpose</th><th>Data Type</th><th>Notes</th></tr></thead><tbody><tr><td>DEV</td><td>Development</td><td>Synthetic</td><td>SI-only</td></tr><tr><td>SIT</td><td>Integration Testing</td><td>Synthetic/masked</td><td>Includes SIGA/Immigration test endpoints</td></tr><tr><td>UAT</td><td>Business Validation</td><td>Masked/controlled</td><td>UAT users and acceptance tests</td></tr><tr><td>PRE-PROD</td><td>Dress Rehearsal</td><td>Masked subset</td><td>Production-like topology</td></tr><tr><td>PROD</td><td>Live Operations</td><td>Real</td><td>Audited &#x26; change-controlled</td></tr><tr><td>DR</td><td>Failover</td><td>Real replica</td><td>Restricted access</td></tr></tbody></table>
 
 **Promotion policy:** DEV → SIT → UAT → PRE-PROD → PROD\
 **Key rule:** Same deployment method across environments (IaC/Helm), with scaling differences only.
@@ -249,8 +238,3 @@ For both SIGA and Immigration integrations:
 * **Scalability:** horizontal scaling for stateless services; capacity planning for data services
 * **Performance:** monitored p95 latency for key APIs and processing throughput targets
 * **Operability:** dashboards, runbooks, alerts, and maintenance processes
-
----
-## Navigation
-- **Previous:** [National ID](./README.md)
-- **Next:** [Deployment Topology & Network Plan](./deployment-topology-and-network-plan.md)

@@ -1,24 +1,20 @@
 ---
 title: Cluster Provisioning & Baseline Setup
-description: Provision Observation and MOSIP Kubernetes clusters using RKE with a hardened baseline.
+description: >-
+  Provision Observation and MOSIP Kubernetes clusters using RKE with a hardened
+  baseline.
 ---
 
 # Cluster Provisioning & Baseline Setup
 
 This page covers the **end-to-end provisioning steps** to bring up the **Observation Kubernetes cluster** and the **MOSIP Kubernetes cluster** for São Tomé & Príncipe (STP), using **RKE**, with a hardened baseline (swap off, Docker installed, SSH hygiene), and clear **validation gates** before moving to ingress / Istio / MOSIP Helm installs.
 
-## Related pages
-
-- Platform prerequisites: [Platform Pre-requisites](./platform-pre-requisites.md)
-
-- Ingress & routing: [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)
-
 ***
 
 ### Before You Start
 
 {% hint style="info" %}
-#### Why this page matters
+**Why this page matters**
 
 Most deployment failures occur because Kubernetes nodes are not configured consistently (swap enabled, incorrect Docker/kernel settings, SSH access issues). This page ensures both clusters are built the same way every time—especially important for **DR rebuilds**.
 {% endhint %}
@@ -107,7 +103,7 @@ RKE and Ansible require consistent access to nodes. Passwordless SSH reduces err
 
 ### 3. Prepare Nodes with Ansible (Baseline)
 
-We first apply the same baseline to Observation nodes, then repeat for **MOSIP nodes**.
+We first apply the same baseline to the Observation nodes, then repeat the process for the **MOSIP nodes**.
 
 #### 3.1 Go to the Ansible directory (Observation)
 
@@ -137,7 +133,7 @@ ansible-playbook -i hosts.ini swap.yaml
 
 {% hint style="info" %}
 **Why disable swap?**\
-Kubernetes requires that swap be disabled (or explicitly configured) because it can cause unpredictable memory behavior for pods and scheduling.&#x20;
+Kubernetes requires that swap be disabled (or explicitly configured) because it can cause unpredictable memory behavior for pods and scheduling.
 
 Reference: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#before-you-begin
 {% endhint %}
@@ -261,8 +257,3 @@ Before proceeding to **Ingress & Istio / Platform Installation**, confirm:
 * [ ] `rke up` completed successfully (no failed hosts)
 * [ ] `kubectl get nodes` shows all nodes in `Ready` state
 * [ ] RKE artifacts are stored securely (`cluster.yml`, `cluster.rkestate`, kubeconfig)
-
----
-## Navigation
-- **Previous:** [Platform Pre-requisites](./platform-pre-requisites.md)
-- **Next:** [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)

@@ -1,17 +1,13 @@
 ---
 title: MOSIP Platform Installation
-description: Install the MOSIP platform on the MOSIP Kubernetes cluster using Helm and validate core endpoints.
+description: >-
+  Install the MOSIP platform on the MOSIP Kubernetes cluster using Helm and
+  validate core endpoints.
 ---
 
 # MOSIP Platform Installation
 
 This page documents the steps to install the **MOSIP platform** on the **MOSIP Kubernetes cluster** using the standard **Helm-based deployment** approach used in this STP runbook.
-
-## Related pages
-
-- Ingress & routing: [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)
-
-- Architecture (integration context): [Architecture](./architecture.md)
 
 It assumes you have already completed:
 
@@ -213,7 +209,3 @@ Before moving to the **Integrations** section:
 * [ ] Required portals/services respond via intended FQDNs
 * [ ] Core authentication flows (admin login / IAM endpoints) behave as expected
 * [ ] ConfigMaps/Secrets are stored in the repo (with secret material handled securely)
-
----
-## Navigation
-- **Previous:** [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)

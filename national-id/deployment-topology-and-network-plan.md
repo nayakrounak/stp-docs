@@ -1,6 +1,8 @@
 ---
 title: Deployment Topology & Network Plan
-description: Deployment topology, network zones, DNS, and traffic flows across Observation and MOSIP clusters.
+description: >-
+  Deployment topology, network zones, DNS, and traffic flows across Observation
+  and MOSIP clusters.
 ---
 
 # Deployment Topology & Network Plan
@@ -9,11 +11,9 @@ This page describes **where components are deployed, how we secure administrativ
 
 ## Related pages
 
-- Architecture: [Architecture](./architecture.md)
-
-- Platform prerequisites: [Platform Pre-requisites](./platform-pre-requisites.md)
-
-- Ingress & routing: [Ingress & Edge Routing Setup](./ingress-and-edge-routing-setup.md)
+* Architecture: [Architecture](architecture.md)
+* Platform prerequisites: [Platform Pre-requisites](platform-pre-requisites.md)
+* Ingress & routing: [Ingress & Edge Routing Setup](ingress-and-edge-routing-setup.md)
 
 ***
 
@@ -298,10 +298,3 @@ Test (replace with your FQDNs):
 curl https://api.<env>.<domain>/httpbin/get?show_env=true
 curl https://api-internal.<env>.<domain>/httpbin/get?show_env=true
 ```
-
-***
-
----
-## Navigation
-- **Previous:** [Architecture](./architecture.md)
-- **Next:** [Platform Pre-requisites](./platform-pre-requisites.md)

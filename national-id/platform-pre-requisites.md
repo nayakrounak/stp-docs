@@ -1,20 +1,16 @@
 ---
 title: Platform Pre-requisites
-description: Minimum prerequisites to prepare infrastructure, access, DNS, and tooling before MOSIP deployment.
+description: >-
+  Minimum prerequisites to prepare infrastructure, access, DNS, and tooling
+  before MOSIP deployment.
 ---
 
 # Platform Pre-requisites
 
 This section lists the minimum prerequisites required before starting the MOSIP deployment for São Tomé & Príncipe (STP). It includes the **bastion host toolchain**, **baseline VM sizing**, **DNS planning**, and **secure access setup (WireGuard + SSH hygiene)**.
 
-## Related pages
-
-- Deployment topology: [Deployment Topology & Network Plan](./deployment-topology-and-network-plan.md)
-
-- Cluster provisioning: [Cluster Provisioning & Baseline Setup](./cluster-provisioning-and-baseline-setup.md)
-
 {% hint style="info" %}
-#### Before You Start
+**Before You Start**
 
 Fill these values once per environment and keep them consistent across all pages:
 
@@ -39,7 +35,7 @@ All deployment activities should be executed from a secure **bastion host**.
 
 {% hint style="info" %}
 **Why a Bastion host?**\
-A bastion provides a single hardened entry-point for administrative access, tooling, and auditability, reducing direct exposure of cluster nodes and internal services.
+A bastion provides a single hardened entry point for administrative access, tooling, and auditability, reducing direct exposure of cluster nodes and internal services.
 {% endhint %}
 
 #### 1.1 Install Git (v2.25.1 or higher)
@@ -101,7 +97,7 @@ istioctl version --remote=false
 
 {% hint style="warning" %}
 **Why RKE (and an important note):**\
-RKE is a Kubernetes cluster provisioning tool that simplifies on-premises cluster creation. However, RKE1 has reached end of life; new deployments should consider RKE2 (or another supported Kubernetes distribution) unless there is a project constraint to remain on RKE1 for compatibility. ([github.com](https://github.com/rancher/rke))
+RKE is a Kubernetes cluster provisioning tool that simplifies on-premises cluster creation. However, RKE1 has reached end of life; new deployments should consider RKE2 (or another supported Kubernetes distribution) unless there is a project constraint that requires remaining on RKE1 for compatibility. ([github.com](https://github.com/rancher/rke))
 {% endhint %}
 
 ```bash
@@ -197,7 +193,7 @@ Stable hostnames simplify TLS certificate management, client configuration (e.g.
 
 {% hint style="info" %}
 **Why restrict private endpoints?**\
-Admin and internal endpoints expose powerful operations and sensitive data flows. Restricting them to WireGuard/admin allowlists reduces attack surface and supports audit and compliance requirements.
+Admin and internal endpoints expose powerful operations and sensitive data flows. Restricting them to WireGuard/admin allowlists reduces the attack surface and supports audit and compliance requirements.
 {% endhint %}
 
 * Private endpoints must only be accessible through WireGuard and/or a tightly controlled admin CIDR allowlist.
@@ -267,7 +263,7 @@ ansible-playbook -i hosts.ini docker.yaml
 
 {% hint style="info" %}
 **Why the linuxserver/wireguard container?**\
-It provides a widely used, repeatable containerized WireGuard setup, simplifying deployment and upgrades compared to manual server configuration. ([hub.docker.com](https://hub.docker.com/r/linuxserver/wireguard))
+It provides a widely used, repeatable, containerized WireGuard setup that simplifies deployment and upgrades compared to manual server configuration. ([hub.docker.com](https://hub.docker.com/r/linuxserver/wireguard))
 {% endhint %}
 
 ```bash
@@ -342,7 +338,7 @@ ansible-playbook -i hosts.ini docker.yaml
 {% hint style="info" %}
 **Why does Rancher / Keycloak appear in the DNS list?**\
 Rancher is commonly used to manage Kubernetes clusters and provide a central operations UI. ([ranchermanager.docs.rancher.com](https://ranchermanager.docs.rancher.com/))\
-Keycloak provides IAM capabilities (login, administration, RBAC integration patterns) and is widely used for managing access to administrative services. ([keycloak.org](https://www.keycloak.org/docs/latest/server_admin/index.html))
+Keycloak provides IAM capabilities (login, administration, and RBAC integration patterns) and is widely used to manage access to administrative services. ([keycloak.org](https://www.keycloak.org/docs/latest/server_admin/index.html))
 {% endhint %}
 
 Generate cluster.yml using RKE:
@@ -370,8 +366,3 @@ Most MOSIP deployment failures come from missing baseline dependencies (DNS/TLS,
 * VMs provisioned as per baseline sizing (or approved updated sizing)
 * DNS records planned for observation + MOSIP clusters (public and private)
 * WireGuard UDP 51820 opened (VM + firewall) and SSH key permissions hardened
-
----
-## Navigation
-- **Previous:** [Deployment Topology & Network Plan](./deployment-topology-and-network-plan.md)
-- **Next:** [Cluster Provisioning & Baseline Setup](./cluster-provisioning-and-baseline-setup.md)

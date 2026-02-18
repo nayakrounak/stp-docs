@@ -1,21 +1,13 @@
 ---
 title: Ingress & Edge Routing Setup
-description: Configure ingress and edge routing (ingress-nginx + Istio gateways) and validate routing using httpbin.
+description: >-
+  Configure ingress and edge routing (ingress-nginx + Istio gateways) and
+  validate routing using httpbin.
 ---
 
 # Ingress & Edge Routing Setup
 
 This page explains how we expose **private admin tools** (Observation cluster) and **MOSIP platform endpoints** (MOSIP cluster) using a layered approach:
-
-## Related pages
-
-- Cluster provisioning: [Cluster Provisioning & Baseline Setup](./cluster-provisioning-and-baseline-setup.md)
-
-- MOSIP installation: [MOSIP Platform Installation](./mosip-platform-installation.md)
-
-* **Observation cluster**: `ingress-nginx` for private dashboards behind the Observation LB
-* **MOSIP cluster**: **Istio ingress gateways** (internal + external) behind the MOSIP LB
-* **VM-based Nginx LBs**: stable edge, TLS termination, allowlists, and exposure policy enforcement
 
 ***
 
@@ -174,8 +166,3 @@ Before proceeding to “MOSIP platform installation”:
 * [ ] DNS records resolve correctly to the right LB IPs
 * [ ] `httpbin` tests succeed for both public (if applicable) and internal routes
 * [ ] Admin endpoints are reachable only via WireGuard / allowlist
-
----
-## Navigation
-- **Previous:** [Cluster Provisioning & Baseline Setup](./cluster-provisioning-and-baseline-setup.md)
-- **Next:** [MOSIP Platform Installation](./mosip-platform-installation.md)
