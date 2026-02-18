@@ -110,25 +110,11 @@ Admin UIs expose privileged operations and sensitive data paths. Keeping them of
 
 #### 4.1 Administrative access (private)
 
-```mermaid
-flowchart LR
-  A[Admin Laptop] -->|WireGuard VPN| B[WireGuard Bastion]
-  B -->|Private routing| C[Observation Nginx / LB]
-  C --> D[Rancher UI]
-  C --> E[Ops IAM (e.g., Keycloak)]
-  B -->|Private routing| F[MOSIP Nginx / LB (Private)]
-  F --> G[Istio IngressGateway - internal]
-  G --> H[MOSIP Internal Services]
-```
+<figure><img src="../.gitbook/assets/administrative-access-private.png" alt=""><figcaption></figcaption></figure>
 
 #### 4.2 Public MOSIP access (only if required)
 
-```mermaid
-flowchart LR
-  U[Internet Users / Partners] -->|HTTPS 443| P[MOSIP Nginx / LB (Public)]
-  P --> Q[Istio IngressGateway - external]
-  Q --> R[MOSIP Public Services]
-```
+<figure><img src="../.gitbook/assets/public-mosip-access (1).png" alt=""><figcaption></figcaption></figure>
 
 ***
 
