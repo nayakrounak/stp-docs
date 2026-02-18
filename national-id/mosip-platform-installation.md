@@ -22,10 +22,10 @@ It assumes you have already completed:
 {% hint style="info" %}
 **Primary references (official):**
 
-* MOSIP Helm Charts guide: https://docs.mosip.io/1.2.0/setup/deploymentnew/getting-started/helm-charts
-* MOSIP k8s-infra repository: https://github.com/mosip/k8s-infra
-* Helm documentation: https://helm.sh/docs/
-* Kubernetes documentation: https://kubernetes.io/docs/home/
+* MOSIP Helm Charts guide: [https://docs.mosip.io/1.2.0/setup/deploymentnew/getting-started/helm-charts](https://docs.mosip.io/1.2.0/setup/deploymentnew/getting-started/helm-charts)
+* MOSIP k8s-infra repository: [https://github.com/mosip/k8s-infra](https://github.com/mosip/k8s-infra)
+* Helm documentation: [https://helm.sh/docs/](https://helm.sh/docs/)
+* Kubernetes documentation: [https://kubernetes.io/docs/home/](https://kubernetes.io/docs/home/)
 {% endhint %}
 
 ***
@@ -41,13 +41,13 @@ We deploy MOSIP using:
 {% hint style="info" %}
 **Why Helm?**\
 MOSIP components are packaged as Helm charts to standardize installation and upgrades across environments. Helm also supports clean rollbacks and versioned releases.\
-Reference: https://helm.sh/docs/
+Reference: [https://helm.sh/docs/](https://helm.sh/docs/)
 {% endhint %}
 
 {% hint style="info" %}
 **Why namespaces?**\
 Namespaces allow logical separation of workloads and simplify RBAC, network policies, and operational workflows.\
-Reference: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+Reference: [https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)
 {% endhint %}
 
 ***
@@ -71,7 +71,7 @@ kubectl get svc -n istio-system
 {% hint style="info" %}
 **Why this gate?**\
 MOSIP endpoint exposure typically depends on Istio ingress gateways (internal/external). If Istio is unhealthy, MOSIP endpoints won’t route correctly.\
-Reference: https://istio.io/latest/docs/tasks/traffic-management/ingress/
+Reference: [https://istio.io/latest/docs/tasks/traffic-management/ingress/](https://istio.io/latest/docs/tasks/traffic-management/ingress/)
 {% endhint %}
 
 ***
@@ -100,13 +100,13 @@ MOSIP deployments rely on environment-specific configuration such as domain name
 {% hint style="info" %}
 **Why ConfigMaps?**\
 ConfigMaps store non-sensitive configuration (URLs, feature flags, environment identifiers) and keep Helm values to a minimum.\
-Reference: https://kubernetes.io/docs/concepts/configuration/configmap/
+Reference: [https://kubernetes.io/docs/concepts/configuration/configmap/](https://kubernetes.io/docs/concepts/configuration/configmap/)
 {% endhint %}
 
 {% hint style="info" %}
 **Why Secrets?**\
 Secrets store sensitive configuration (passwords, tokens, private keys). They should be rotated and protected with RBAC and, if supported, encryption at rest.\
-Reference: https://kubernetes.io/docs/concepts/configuration/secret/
+Reference: [https://kubernetes.io/docs/concepts/configuration/secret/](https://kubernetes.io/docs/concepts/configuration/secret/)
 {% endhint %}
 
 > **STP note:** Keep a strict split between internal endpoints (e.g., `api-internal.<env>.<domain>`) and public endpoints (e.g., `api.<env>.<domain>`) as per the DNS policy.
