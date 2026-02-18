@@ -6,8 +6,6 @@ description: >-
 
 # Arquitetura
 
-## Arquitetura
-
 Esta secção descreve a arquitetura-alvo para a implementação de Identificação Nacional em São Tomé e Príncipe (STP), utilizando o **MOSIP** como plataforma fundacional. Abrange os blocos lógicos, a topologia por ambientes, o zonamento de rede e os principais fluxos ponta‑a‑ponta de enrolamento, processamento, emissão e verificação — bem como as integrações com **SIGA** e **Imigração**.
 
 ***
