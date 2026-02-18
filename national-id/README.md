@@ -1,91 +1,80 @@
 ---
 description: >-
-  Implementation and deployment documentation for the STP National ID program
+  Documentação de implementação e operação do Programa de Identificação Nacional de STP
   using MOSIP.
 ---
 
-# Identificação Nacional
+# Nacional ID
 
-Este GitBook provides the implementation and implementação documentation for the Identificação Nacional program in São Tomé & Príncipe (STP), using **MOSIP** as the foundational Identificação Nacional platform. It is intended to guide government stakeholders, system integrators, and operations teams through the end-to-end setup—from ambiente preparation and core platform implementação to enrollment rollout, ABIS integration, go-live, and ongoing operations.
+Este GitBook disponibiliza a documentação de implementação e de operação do programa de Identificação Nacional em São Tomé e Príncipe (STP), utilizando o **MOSIP** como plataforma base de Identificação Nacional. Destina-se a orientar as partes interessadas do Governo, os integradores de sistemas e as equipas de operações ao longo da configuração ponta-a-ponta — desde a preparação do ambiente e a implementação da plataforma base até ao implementação gradual do registo, integração (quando aplicável), entrada em produção (go‑live) e operações contínuas.
 
-### Purpose of this Documentation
+### Purpose of this Documentação
 
-This documentation aims to:
+This documentação aims para:
 
-* Provide a clear, repeatable approach to deploying MOSIP across **DEV / SIT / UAT / PRE-PROD / PROD / DR** ambientes
-* Establish common standards for **segurança, configuration management, monitoring, backup, and disaster recovery**
-* Define how **enrollment sites** are prepared and rolled out, including device readiness and field support procedures
-* Document integration touchpoints (e.g., ABIS, CRVS/civil registry, messaging gateways, and other government systems as applicable)
-* Support a controlled **go-live and handover**, with readiness gates, cutover steps, rollback plans, and hypercare
+* Provide a clear, repeatable approach para deploying MOSIP across **DEV / SIT / UAT / PRE-PROD / PROD / DR** ambientes
+* Establish common standards para **segurança, configuration management, monitorização, cópias de segurança, e desastre recuperação**
+* Define how **registo locais** are prepared e rolled out, including dispositivo prontidão e field support procedures
+* Document integration touchpoints (e.g., ABIS, CRVS/civil registry, messaging gateways, e other government systems as applicable)
+* Support a controlled **entrada em produção e handover**, com prontidão gates, cutover steps, rollback plans, e hypercare
 
-### Solution Overview (High-Level)
+### Solution Visão geral (High-Level)
 
-The Identificação Nacional solution is centered on MOSIP and includes:
+A solução de Identificação Nacional assenta no MOSIP e inclui:
 
-* **Enrollment & Registration**: operator-led enrollment using registration clients and MOSIP-compliant devices
-* **Packet Processing & Workflow**: backend processing, validation, and adjudication of enrollment packets
-* **Deduplication**: Deduplication using integration with the Civil Registry System in Sao Tome & Principe.
-* **Identity Repository**: secure storage of identity records and supporting artifacts under strict access controls
-* **Credential Issuance**: issuance of national identification credentials (physical and/or digital, depending on scope)
-* **Authentication & Verification (as applicable)**: standards-based authentication and verification services for approved relying parties, including público verification modules where necessários
+* **Enrollment & Registration**: operator-led registo utilizando registration clients e MOSIP-compliant devices
+* **Packet Processing & Workflow**: backend processing, validação, e adjudication of registo packets
+* **Deduplication**: Deduplication utilizando integration com the Civil Registry System in Sao Tome & Principe.
+* **Identity Repository**: secure storage of identity records e supporting artifacts under strict acesso controls
+* **Credential Issuance**: issuance of nacional identification credentials (physical e/ou digital, depending on scope)
+* **Authentication & Verification (as applicable)**: standards-based authentication e verification services para approved relying parties, including público verification modules where required
 
-### Deployment Principles
+### Implementação Principles
 
-The implementation follows these principles:
+The implementação follows these principles:
 
-* **Security by design**: least privilege access, encryption in transit and at rest, strong audit trails, and controlled admin access
-* **Repeatable implementaçãos**: infrastructure and platform setup are versioned and reproducible across ambientes
-* **Operational readiness**: monitoring, alerting, runbooks, backups, and DR plans are part of the baseline implementação—not an afterthought
-* **Scalable rollout**: enrollment is introduced via pilots and phased expansion with site readiness and acceptance criteria
+* **Segurança by design**: least privilege acesso, encryption in transit e at rest, strong auditoria trails, e controlled admin acesso
+* **Repeatable deployments**: infrastructure e plataforma configuração are versionado e reproduzível across ambientes
+* **Operational prontidão**: monitorização, alertas, runbooks, backups, e DR plans are part of the base implementação—not an afterthought
+* **Scalable implementação gradual**: registo is introduced via pilots e phased expansion com site prontidão e acceptance criteria
 
 ### Intended Audience
 
-Este GitBook is intended for:
+This GitBook is destina-se para:
 
-* Government program leadership and technical governance teams
-* Identificação Nacional IT administrators and infrastructure teams
-* System integrator implementação and engineering teams
-* Security, audit, and compliance teams
-* Operations and support teams (NOC / helpdesk / L2 / L3)
+* Government programa leadership e technical governance equipas
+* Nacional ID IT administrators e infrastructure equipas
+* System integrator implementação e engineering equipas
+* Equipas de segurança, auditoria e conformidade
+* Operations e support equipas (NOC / helpdesk / L2 / L3)
 
-### How to Use Este GitBook
+### How para Utilize This GitBook
 
-* Start with **Arquitetura** to understand the implementação topology and key MOSIP building blocks
-* Use **Platform Pré-requisitos** before provisioning ambientes
-* Follow **Core MOSIP Deployment** and **Integrations** for step-by-step installation guidance
-* Use **Enrollment & Field Rollout** for site readiness, device setup, and operational procedures
-* Refer to **Operations, Backup & DR** for day-2 activities and business continuity
-* Use **Go-Live & Handover** checklists to run a controlled cutover and transition to steady-state operations
+* Comece por **Arquitetura** para compreender a topologia de implementação e os principais blocos do MOSIP
+* Utilize **Plataforma Pré-requisitos** before provisioning ambientes
+* Siga **Implementação Base do MOSIP** e **Integrações** para orientações de instalação passo a passo
+* Utilize **Registo e Implementação no Terreno** para prontidão dos locais, configuração de dispositivos e procedimentos operacionais
+* Refer para **Operations, Backup & DR** para day-2 activities e business continuity
+* Utilize **Go-Live & Handover** checklists para run a controlled cutover e transition para steady-state operações
 
-### In Scope (This Documentation)
+### In Scope (This Documentação)
 
-* Environment setup and MOSIP implementação (all ambientes)
-* Configuration and secrets management approach
-* External System integration, implementação, and validation
-* Enrollment rollout playbook and readiness checklists
-* Monitoring, logging, backup/restore, and DR runbooks
-* Go-live, rollback, hypercare, and handover
+* Environment configuração e MOSIP implementação (all ambientes)
+* Configuration e secrets management approach
+* External System integration, implementação, e validação
+* Enrollment implementação gradual playbook e prontidão checklists
+* Monitoring, logging, cópias de segurança/restore, e DR runbooks
+* Go-live, rollback, hypercare, e handover
 
 ### Out of Scope (Unless Explicitly Added)
 
-* Procurement of enrollment hardware and network equipment
-* Mobile device management (MDM) for government phones
-* Non-Identificação Nacional systems are not integrated as part of the program scope
-* Custom application development beyond agreed integrations and extensions
+* Procurement of registo hardware e rede equipment
+* Mobile dispositivo management (MDM) para government phones
+* Non-Nacional ID systems are not integrated as part of the programa scope
+* Custom application development beyond agreed integrations e extensions
 
-### Propriedade do Documento e Controlo de Alterações
+### Document Ownership e Change Control
 
 Este GitBook é mantido conjuntamente pelo **Integrador de Sistemas — Ooru Digital Private Limited** e pelos **responsáveis técnicos do Governo de São Tomé e Príncipe — INIC e DGRN**. Serve como referência oficial para a arquitetura de implementação, procedimentos de instalação, bases de segurança, integrações e runbooks operacionais da implementação de Identificação Nacional.
 
 Quaisquer alterações que afetem **procedimentos de implementação em produção**, **controlos de segurança**, **interfaces de integração**, **tratamento de dados** ou **runbooks de operações/DR** devem seguir o **processo de gestão de mudanças** acordado. Essas alterações devem ser **revistas**, **avaliadas quanto ao risco** e **formalmente aprovadas** pelos responsáveis técnicos designados (INIC/DGRN) e pelo Integrador de Sistemas (Ooru Digital) **antes** de serem adotadas em produção.
-
-Controlos recomendados:
-- As alterações devem ser submetidas através de atualizações com controlo de versões (PR/MR), com um resumo claro, justificação e plano de rollback.
-- Alterações com impacto em produção devem ser revistas por pares e aprovadas antes do merge.
-- Cada release de produção deve referenciar um pedido de mudança aprovado e uma versão etiquetada da documentação.
-
-
-
-Este GitBook is jointly maintained by the System Integrator — Ooru Digital Private Limited and the Government of São Tomé & Príncipe technical owners — INIC and DGRN. It serves as the authoritative reference for implementação architecture, installation procedures, segurança baselines, integrations, and operational runbooks for the Identificação Nacional implementation.
-
-Any changes that affect production implementação procedures, segurança controls, integration interfaces, data handling, or operations/DR runbooks deve follow the agreed change management process. Such changes deve be reviewed, risk-assessed, and formally approved by the designated technical owners (INIC/DGRN) and the System Integrator (Ooru Digital) before being adopted in production.

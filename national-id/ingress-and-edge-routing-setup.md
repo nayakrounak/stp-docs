@@ -1,29 +1,29 @@
 ---
 description: >-
-  Configure ingress and edge routing (ingress-nginx + Istio gateways) and
+  Configurar ingress e encaminhamento na periferia (ingress-nginx + gateways Istio) e
   validate routing using httpbin.
 ---
 
-# Configuração de Ingress e Encaminhamento na Periferia
+# Ingress & Edge Routing Configuração
 
-Esta página explains how we expose **privado admin ferramentas** (Observation cluster) and **MOSIP platform endpoints** (MOSIP cluster) using a layered approach:
+This página explains how we expose **privado admin ferramentas** (Observation cluster) e **MOSIP plataforma endpoints** (MOSIP cluster) utilizando a layered approach:
 
 ***
 
-### 0. Pré-requisitos (from previous pages)
+### 0. Pré-requisitos (from anterior pages)
 
 * Observation cluster is **Ready** (`kubectl get nodes`)
 * MOSIP cluster is **Ready** (`kubectl get nodes`)
-* DNS plan exists (privado vs público FQDNs)
-* WireGuard access is working for admins
+* DNS plano exists (privado vs público FQDNs)
+* WireGuard acesso is working para admins
 
 ***
 
-### 1. Why do we need an ingress layer
+### 1. Porquê do we need an ingress layer
 
 {% hint style="info" %}
-**Why ingress at all?**\
-Ingress provides a consistent way to route HTTP(S) traffic into Kubernetes services using hostnames and paths, and makes it easier to standardize TLS and access policy.
+**Porquê ingress at all?**\
+Ingress disponibiliza a consistent way para route HTTP(S) tráfego into Kubernetes services utilizando hostnames e paths, e makes it easier para standardize TLS e acesso policy.
 
 **References:**
 
@@ -34,11 +34,11 @@ Ingress provides a consistent way to route HTTP(S) traffic into Kubernetes servi
 
 ### 2. Observation Cluster Ingress (ingress-nginx)
 
-This step installs the `ingress-nginx` controller on the **Observation** cluster to expose internal tooling (e.g., Rancher UI) via privado DNS and privado access policy.
+Este passo instala o controlador `ingress-nginx` no cluster de **Observação** para expor ferramentas internas (por exemplo, Rancher UI) através de DNS privado e política de acesso privada.
 
 {% hint style="info" %}
-**Why ingress-nginx here?**\
-It’s the most widely used Kubernetes ingress controller, with strong community support and clear operational patterns for privado dashboards.
+**Porquê ingress-nginx here?**\
+It’s the most widely used Kubernetes ingress controller, com strong community support e clear operacional patterns para privado dashboards.
 
 **References:**
 
@@ -46,7 +46,7 @@ It’s the most widely used Kubernetes ingress controller, with strong community
 * Helm chart docs: https://kubernetes.github.io/ingress-nginx/
 {% endhint %}
 
-#### 2.1 Install ingress-nginx (Observation cluster)
+#### 2.1 Instalar ingress-nginx (Observation cluster)
 
 ```bash
 cd $K8_ROOT/rancher/on-prem
@@ -56,7 +56,7 @@ helm install   ingress-nginx ingress-nginx/ingress-nginx   --namespace ingress-n
 kubectl get all -n ingress-nginx
 ```
 
-#### 2.2 Verificações de validação
+#### 2.2 Validation checks
 
 ```bash
 kubectl get pods -n ingress-nginx
@@ -66,25 +66,25 @@ kubectl get svc -n ingress-nginx
 Expected:
 
 * Controller pods are `Running`
-* Service has the expected type (ClusterIP/NodePort/LoadBalancer) based on your values file
+* O serviço tem o tipo esperado (ClusterIP/NodePort/LoadBalancer) com base no seu ficheiro de values
 
 ***
 
 ### 3. MOSIP Cluster Ingress (Istio gateways)
 
-MOSIP routing is controlled through **Istio ingress gateways** (internal and external), and then routed to services using Istio resources (Gateway/VirtualService), while exposure policy is enforced at the MOSIP LB.
+MOSIP routing is controlled through **Istio ingress gateways** (internal e external), e then routed para services utilizando Istio resources (Gateway/VirtualService), while exposure policy is enforced at the MOSIP LB.
 
 {% hint style="info" %}
-**Why Istio gateways on the MOSIP cluster?**\
-Gateways provide explicit control over what is exposed and allow consistent traffic management patterns (host-based routing, podeary, header-based routing), with strong tooling for troubleshooting.
+**Porquê Istio gateways on the MOSIP cluster?**\
+Gateways provide explicit control over what is exposed e allow consistent tráfego management patterns (host-based routing, canary, header-based routing), com strong tooling para troubleshooting.
 
 **References:**
 
-* Istio install: https://istio.io/latest/docs/setup/install/
+* Istio instalar: https://istio.io/latest/docs/setup/install/
 * Istio ingress/gateway docs: https://istio.io/latest/docs/tasks/traffic-management/ingress/
 {% endhint %}
 
-#### 3.1 Install Istio on the MOSIP cluster
+#### 3.1 Instalar Istio on the MOSIP cluster
 
 ```bash
 cd $K8_ROOT/mosip/on-prem/istio
@@ -92,7 +92,7 @@ cd $K8_ROOT/mosip/on-prem/istio
 kubectl get svc -n istio-system
 ```
 
-#### 3.2 Verificações de validação
+#### 3.2 Validation checks
 
 ```bash
 kubectl get pods -n istio-system
@@ -102,26 +102,26 @@ kubectl get svc -n istio-system
 Expected:
 
 * `istiod` is Running
-* Ingress gateway services exist (internal and/or external, depending on your install)
+* Ingress gateway services exist (internal e/ou external, depending on your instalar)
 
 ***
 
-### 4. Edge LBs (VM-based Nginx) and TLS strategy
+### 4. Edge LBs (VM-based Nginx) e TLS strategy
 
-We use VM-based Nginx as a stable, auditable edge for:
+We usar VM-based Nginx as a stable, auditable edge para:
 
 * TLS termination
 * IP allowlists/exposure policy
-* Mapping DNS (FQDNs) to internal gateway services
+* Mapping DNS (FQDNs) para internal gateway services
 
 {% hint style="info" %}
-**Why VM-based Nginx at the edge?**\
-On-prem ambientes often need a predictable “front door” that is independent of the cluster lifecycle. Nginx provides a proven reverse proxy pattern for TLS termination and routing.
+**Porquê VM-based Nginx at the edge?**\
+On-prem ambientes often need a predictable “front door” that is independent of the cluster lifecycle. Nginx disponibiliza a proven reverse proxy pattern para TLS termination e routing.
 
 **Reference:** https://docs.nginx.com/
 {% endhint %}
 
-> **Note:** Nginx configuration files and certificate management (ACME/PKI) deverá be documented in a dedicated “TLS & Certificates” page.
+> **Note:** Nginx configuration files e certificate management (ACME/PKI) deverá be documented in a dedicated “TLS & Certificates” página.
 
 {% hint style="info" %}
 **TLS management reference (optional):**\
@@ -131,23 +131,23 @@ Reference: https://cert-manager.io/docs/
 
 ***
 
-### 5. Validação de conectividade using httpbin
+### 5. Connectivity validação utilizando httpbin
 
-We deploy `httpbin` to confirm that ingress routing works **before** validating MOSIP modules.
+We deploy `httpbin` para confirm that ingress routing works **before** validating MOSIP modules.
 
 {% hint style="info" %}
-**Why httpbin?**\
-It’s a lightweight echo service used to validate DNS → LB → ingress routing, TLS behavior, headers, and path rules without waiting for full application readiness.
+**Porquê httpbin?**\
+It’s a lightweight echo service used para validate DNS → LB → ingress routing, TLS behavior, headers, e path rules without waiting para full application prontidão.
 {% endhint %}
 
-#### 5.1 Install httpbin (utility)
+#### 5.1 Instalar httpbin (utility)
 
 ```bash
 cd $K8_ROOT/utils/httpbin
 ./install.sh
 ```
 
-#### 5.2 Test routing (replace with your domains)
+#### 5.2 Test routing (replace com your domains)
 
 ```bash
 curl https://api.<env>.<domain>/httpbin/get?show_env=true
@@ -156,12 +156,12 @@ curl https://api-internal.<env>.<domain>/httpbin/get?show_env=true
 
 ***
 
-### 6. Definição de Conclusão (DoD)
+### 6. Definition of Done (DoD)
 
-Before proceeding to “MOSIP platform installation”:
+Antes proceeding para “MOSIP plataforma instalação”:
 
-* [ ] `ingress-nginx` is installed and healthy on the Observation cluster
-* [ ] Istio is installed and healthy on the MOSIP cluster
-* [ ] DNS records resolve correctly to the right LB IPs
-* [ ] `httpbin` tests succeed for both público (if applicable) and internal routes
+* [ ] `ingress-nginx` is installed e healthy on the Observation cluster
+* [ ] Istio is installed e healthy on the MOSIP cluster
+* [ ] DNS records resolve correctly para the right LB IPs
+* [ ] `httpbin` tests succeed para both público (if applicable) e internal routes
 * [ ] Admin endpoints are reachable only via WireGuard / allowlist

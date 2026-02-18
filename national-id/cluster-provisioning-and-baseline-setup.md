@@ -4,18 +4,18 @@ description: >-
   baseline.
 ---
 
-# Provisionamento do Cluster e Configuração de Base
+# Cluster Provisioning & Baseline Configuração
 
-Esta página covers the **end-to-end provisioning steps** to bring up the **Observation Kubernetes cluster** and the **MOSIP Kubernetes cluster** for São Tomé & Príncipe (STP), using **RKE**, with a hardened baseline (swap off, Docker installed, SSH hygiene), and clear **validation gates** before moving to ingress / Istio / MOSIP Helm installs.
+Esta página descreve os **passos de provisionamento ponta‑a‑ponta** para colocar em funcionamento o **cluster Kubernetes de Observação** e o **cluster Kubernetes do MOSIP** em São Tomé e Príncipe (STP), utilizando **RKE**, com uma base reforçada (swap desativado, Docker instalado, boas práticas de SSH) e **gates de validação** claros antes de avançar para ingress / Istio / instalações via Helm.
 
 ***
 
-### Antes de começar
+### Antes You Começar
 
 {% hint style="info" %}
-**Why this page matters**
+**Porquê this página matters**
 
-Most implementação failures occur because Kubernetes nodes are not configured consistently (swap enabled, incorrect Docker/kernel settings, SSH access issues). Esta página ensures both clusters are built the same way every time—especially important for **DR rebuilds**.
+A maioria das falhas de implementação ocorre porque os nós Kubernetes não estão configurados de forma consistente (swap ativo, definições Docker/kernel incorretas, problemas de acesso SSH). Esta página garante que ambos os clusters são construídos da mesma forma em todas as ocasiões — especialmente importante para **reconstruções de DR**.
 {% endhint %}
 
 Define these values (once per ambiente):
@@ -42,13 +42,13 @@ export INFRA_ROOT=$MOSIP_ROOT/mosip-infra
 ```
 
 {% hint style="info" %}
-**Why ambiente variables?**\
-They standardize paths across pages/runbooks so operators don’t “cd into the wrong folder” and scripts work consistently.
+**Porquê ambiente variables?**\
+They standardize paths across pages/runbooks so operators don’t “cd into the wrong folder” e scripts work consistently.
 {% endhint %}
 
-#### 1.2 Confirm necessários ferramentas are installed
+#### 1.2 Confirm required ferramentas are installed
 
-At mínimos:
+At minimum:
 
 * Git
 * Ansible
@@ -67,7 +67,7 @@ At mínimos:
 
 ***
 
-### 2. SSH Hygiene & Passwordless Access (Optional but Recommended)
+### 2. SSH Hygiene & Passwordless Acesso (Optional but Recomendado)
 
 #### 2.1 Generate SSH key (if needed)
 
@@ -75,7 +75,7 @@ At mínimos:
 ssh-keygen -t rsa
 ```
 
-#### 2.2 Copy público key to all nodes
+#### 2.2 Copy público key para all nodes
 
 ```bash
 ssh-copy-id <remote-user>@<remote-ip>
@@ -94,17 +94,17 @@ chmod 400 ~/.ssh/<your private key>
 ```
 
 {% hint style="info" %}
-**Why passwordless SSH?**\
-RKE and Ansible require consistent access to nodes. Passwordless SSH reduces errors during provisioning and supports automated, CI-based rebuilds.
+**Porquê passwordless SSH?**\
+RKE e Ansible require consistent acesso para nodes. Passwordless SSH reduces errors during provisioning e supports automated, CI-based rebuilds.
 {% endhint %}
 
 ***
 
-### 3. Prepare Nodes with Ansible (Baseline)
+### 3. Prepare Nodes com Ansible (Baseline)
 
-We first apply the same baseline to the Observation nodes, then repeat the process for the **MOSIP nodes**.
+Aplicamos primeiro a mesma base aos nós de Observação e, em seguida, repetimos o processo para os **nós do MOSIP**.
 
-#### 3.1 Go to the Ansible directory (Observation)
+#### 3.1 Go para the Ansible directory (Observation)
 
 ```bash
 cd $K8_ROOT/rancher/on-prem
@@ -116,7 +116,7 @@ cd $K8_ROOT/rancher/on-prem
 cp hosts.ini.sample hosts.ini
 ```
 
-Update `hosts.ini` with your node IPs/users.
+Update `hosts.ini` com your node IPs/users.
 
 #### 3.3 Check swap status (before disabling)
 
@@ -131,21 +131,21 @@ ansible-playbook -i hosts.ini swap.yaml
 ```
 
 {% hint style="info" %}
-**Why disable swap?**\
-Kubernetes requires that swap be disabled (or explicitly configured) because it pode cause unpredictable memory behavior for pods and scheduling.
+**Porquê disable swap?**\
+Kubernetes requires that swap be disabled (ou explicitly configured) because it can cause unpredictable memory behavior para pods e scheduling.
 
 Reference: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#before-you-begin
 {% endhint %}
 
-#### 3.5 Install Docker + add user to Docker group
+#### 3.5 Instalar Docker + add user para Docker group
 
 ```bash
 ansible-playbook -i hosts.ini docker.yaml
 ```
 
 {% hint style="info" %}
-**Why Docker baseline?**\
-RKE1 commonly uses Docker as the container runtime. A consistent Docker setup across nodes prevents runtime issues during cluster bring-up. Reference: https://docs.docker.com/engine/install/
+**Porquê Docker base?**\
+RKE1 commonly uses Docker as the container runtime. A consistent Docker configuração across nodes prevents runtime issues during cluster bring-up. Reference: https://docs.docker.com/engine/install/
 {% endhint %}
 
 ***
@@ -158,7 +158,7 @@ RKE1 commonly uses Docker as the container runtime. A consistent Docker setup ac
 rke config
 ```
 
-You will be prompted for node details and SSH key path.
+You will be prompted para node details e SSH key path.
 
 #### 4.2 Edit cluster.yml (if needed)
 
@@ -166,7 +166,7 @@ You will be prompted for node details and SSH key path.
 vi cluster.yml
 ```
 
-If you want to disable default ingress installation (common when you manage ingress separately):
+If you want para disable default ingress instalação (common when you manage ingress separately):
 
 ```yaml
 ingress:
@@ -181,7 +181,7 @@ rke up
 
 #### 4.4 Set kubeconfig
 
-Option A (copy to default):
+Option A (copy para default):
 
 ```bash
 cp $HOME/.kube/<cluster_name>_config $HOME/.kube/config
@@ -193,34 +193,34 @@ Option B (export explicitly):
 export KUBECONFIG="$HOME/.kube/<cluster_name>_config"
 ```
 
-#### 4.5 Validate cluster health
+#### 4.5 Validar cluster health
 
 ```bash
 kubectl get nodes
 ```
 
 {% hint style="info" %}
-**Why these validation steps?**\
-If nodes aren’t `Ready` now, everything later (ingress, Istio, MOSIP Helm installs) becomes unstable and hard to troubleshoot.
+**Porquê these validação steps?**\
+If nodes aren’t `Ready` now, everything later (ingress, Istio, MOSIP Helm installs) becomes unstable e hard para troubleshoot.
 {% endhint %}
 
 #### 4.6 Store RKE artifacts securely
 
-Keep these files in a secure location (necessários for upgrades/node replacement/rebuilds):
+Keep these files in a secure location (required para upgrades/node replacement/rebuilds):
 
 * `cluster.yml`
 * `cluster.rkestate`
-* `kube_config_cluster.yml` (or the generated kubeconfig)
+* `kube_config_cluster.yml` (ou the generated kubeconfig)
 
 ***
 
 ### 5. Create the MOSIP Kubernetes Cluster (RKE)
 
-Repeat the exact same flow for the MOSIP cluster.
+Repita exatamente o mesmo fluxo para o cluster MOSIP.
 
-#### 5.1 Prepare inventory & baseline (MOSIP nodes)
+#### 5.1 Prepare inventory & base (MOSIP nodes)
 
-(If you maintain separate inventories for the MOSIP cluster)
+(If you maintain separate inventories para the MOSIP cluster)
 
 ```bash
 cd $K8_ROOT/rancher/on-prem
@@ -229,7 +229,7 @@ ansible-playbook -i hosts.ini swap.yaml
 ansible-playbook -i hosts.ini docker.yaml
 ```
 
-#### 5.2 Generate and bring up the MOSIP cluster
+#### 5.2 Generate e bring up the MOSIP cluster
 
 ```bash
 rke config
@@ -237,7 +237,7 @@ vi cluster.yml
 rke up
 ```
 
-#### 5.3 Set kubeconfig and validate
+#### 5.3 Set kubeconfig e validate
 
 ```bash
 cp $HOME/.kube/<cluster_name>_config $HOME/.kube/config
@@ -246,13 +246,13 @@ kubectl get nodes
 
 ***
 
-### 6. Definição de Conclusão (DoD) — Cluster Provisioning
+### 6. Definition of Done (DoD) — Cluster Provisioning
 
-Before proceeding to **Ingress & Istio / Platform Installation**, confirm:
+Antes proceeding para **Ingress & Istio / Plataforma Instalação**, confirm:
 
-* [ ] You pode SSH from the bastion to every node using the intended key
+* [ ] Consegue fazer SSH a partir do bastion para todos os nós utilizando a chave prevista
 * [ ] Swap is disabled on all nodes (`swapon --show` returns nothing)
-* [ ] Docker is installed, and the intended user pode run Docker (no sudo issues)
+* [ ] Docker is installed, e the destina-se user can run Docker (no sudo issues)
 * [ ] `rke up` completed successfully (no failed hosts)
 * [ ] `kubectl get nodes` shows all nodes in `Ready` state
 * [ ] RKE artifacts are stored securely (`cluster.yml`, `cluster.rkestate`, kubeconfig)

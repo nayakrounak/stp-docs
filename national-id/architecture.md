@@ -6,21 +6,21 @@ description: >-
 
 # Arquitetura
 
-Esta secção describes the target architecture for the Identificação Nacional implementation in São Tomé & Príncipe (STP) using **MOSIP** as the foundational platform. It covers the logical building blocks, ambiente topology, network zoning, and the primary end-to-end flows for enrollment, processing, issuance, and verification—along with integrations with **SIGA** and **Immigration**.
+Esta secção descreve a arquitetura alvo para a implementação de Identificação Nacional em São Tomé e Príncipe (STP), utilizando o **MOSIP** como plataforma base. Abrange os blocos lógicos, a topologia do ambiente, a segmentação de rede e os principais fluxos ponta‑a‑ponta para registo, processamento, emissão e verificação — bem como as integrações com o **SIGA** e a **Imigração**.
 
 ***
 
-### 1. Arquitetura Overview
+### 1. Arquitetura Visão geral
 
-The MOSIP-based Identificação Nacional platform is deployed as a set of secure, scalable services hosted on a Kubernetes-based infrastructure. The architecture is organized into:
+A plataforma de Identificação Nacional baseada em MOSIP é implementada como um conjunto de serviços seguros e escaláveis, alojados numa infraestrutura baseada em Kubernetes. A arquitetura está organizada em:
 
-* **Enrollment Edge**: registration workstations and MOSIP-compliant biometric devices used at enrollment sites.
-* **Core MOSIP Cluster**: MOSIP services responsible for packet intake, processing workflows, identity repository management, and issuance.
-* **Integration Layer**: secure interfaces connecting MOSIP to **SIGA** and **Immigration** systems for identity validation, data synchronization, and operational workflows.
-* **Access & Identity**: Keycloak-based IAM (and eSignet if in scope) for authentication, authorization, and partner access.
-* **Observability & Operations**: monitoring, logging, auditing, backups, and DR mechanisms supporting day-2 operations.
+* **Enrollment Edge**: registration workstations e MOSIP-compliant biometric devices used at registo locais.
+* **Core MOSIP Cluster**: MOSIP services responsible para packet intake, processing workflows, identity repository management, e issuance.
+* **Integration Layer**: secure interfaces connecting MOSIP para **SIGA** e **Immigration** systems para identity validação, data synchronization, e operacional workflows.
+* **Acesso & Identity**: Keycloak-based IAM (e eSignet if in scope) para authentication, authorization, e partner acesso.
+* **Observability & Operations**: monitorização, logging, auditing, backups, e DR mechanisms supporting day-2 operações.
 
-This architecture supports phased rollout (pilot → scale) and provides controlled exposure for público-facing portals and APIs.
+This architecture supports phased implementação gradual (pilot → scale) e disponibiliza controlled exposure para público-facing portals e APIs.
 
 ***
 
@@ -28,203 +28,203 @@ This architecture supports phased rollout (pilot → scale) and provides control
 
 #### 2.1 Enrollment & Registration
 
-* **Registration Client** deployed on enrollment workstations for demographic capture, document capture, and biometric capture
-* **MOSIP-compliant biometric devices** (fingerprint/face/iris as per STP scope) connected to the registration workstation
-* **Packet creation**: enrollment data and artifacts are packaged securely for transmission to the backend
+* **Registration Client** deployed on registo workstations para demographic capture, document capture, e biometric capture
+* **MOSIP-compliant biometric devices** (fingerprint/face/iris as per STP scope) connected para the registration workstation
+* **Packet creation**: registo data e artifacts are packaged securely para transmission para the backend
 
 #### 2.2 Packet Intake & Processing
 
-* **Packet receiver/intake services** to accept packets from enrollment sites
-* **Registration Processor pipeline** to validate, extract, and process packet data through defined workflows
-* **Operator workflows** (as applicable) for exception handling, quality checks, and adjudication
+* **Packet receiver/intake services** para accept packets from registo locais
+* **Registration Processor pipeline** para validate, extract, e process packet data through defined workflows
+* **Operator workflows** (as applicable) para exception handling, quality checks, e adjudication
 
 #### 2.3 Identity Repository
 
 * Secure storage of:
   * Demographic identity data
-  * Biometric references and metadata (as per STP policy and MOSIP configuration)
-  * Document artifacts and enrollment evidence
-  * Audit trails and system events
-* APIs for internal services and authorized relying systems
+  * Biometric references e metadata (as per STP policy e MOSIP configuration)
+  * Document artifacts e registo evidence
+  * Audit trails e sistema events
+* APIs para internal services e authorized relying systems
 
 #### 2.4 Issuance
 
-* Identity finalization and assignment of identifiers (as per program policy)
+* Identity finalization e assignment of identifiers (as per programa policy)
 * Credential issuance workflows, including:
   * Print/card integration (if applicable)
   * Digital credential issuance (if applicable)
-* Status tracking and reporting
+* Status tracking e reporting
 
 #### 2.5 Authentication & Verification (as applicable)
 
 Depending on the scope:
 
-* **Public verification portal** for document/credential authenticity checks
-* **eSignet** for standards-based authentication and consent (OIDC) for relying parties
-* **Partner onboarding and access controls** for consuming identity services
+* **Público verification portal** para document/credential authenticity checks
+* **eSignet** para standards-based authentication e consent (OIDC) para relying parties
+* **Partner onboarding e acesso controls** para consuming identity services
 
 #### 2.6 Observability & Operations
 
-* Central logging, metrics, dashboards, and alerts
-* Audit logging and tamper-evidence controls
-* Backup/restore and DR readiness
+* Central logging, metrics, dashboards, e alerts
+* Audit logging e tamper-evidence controls
+* Backup/restore e DR prontidão
 
 ***
 
-### 3. Environment Topology
+### 3. Environment Topologia
 
-MOSIP is deployed across multiple ambientes to support safe release management:
+MOSIP is deployed across multiple ambientes para support safe release management:
 
-<table><thead><tr><th width="140.15234375">Environment</th><th>Purpose</th><th>Data Type</th><th>Notes</th></tr></thead><tbody><tr><td>DEV</td><td>Development</td><td>Synthetic</td><td>SI-only</td></tr><tr><td>SIT</td><td>Integration Testing</td><td>Synthetic/masked</td><td>Includes SIGA/Immigration test endpoints</td></tr><tr><td>UAT</td><td>Business Validation</td><td>Masked/controlled</td><td>UAT users and acceptance tests</td></tr><tr><td>PRE-PROD</td><td>Dress Rehearsal</td><td>Masked subset</td><td>Production-like topology</td></tr><tr><td>PROD</td><td>Live Operations</td><td>Real</td><td>Audited &#x26; change-controlled</td></tr><tr><td>DR</td><td>Failover</td><td>Real replica</td><td>Restricted access</td></tr></tbody></table>
+<table><thead><tr><th width="140.15234375">Environment</th><th>Purpose</th><th>Data Type</th><th>Notes</th></tr></thead><tbody><tr><td>DEV</td><td>Development</td><td>Synthetic</td><td>SI-only</td></tr><tr><td>SIT</td><td>Integration Testing</td><td>Synthetic/masked</td><td>Includes SIGA/Immigration test endpoints</td></tr><tr><td>UAT</td><td>Business Validation</td><td>Masked/controlled</td><td>UAT users e acceptance tests</td></tr><tr><td>PRE-PROD</td><td>Dress Rehearsal</td><td>Masked subset</td><td>Production-like topologia</td></tr><tr><td>PROD</td><td>Live Operations</td><td>Real</td><td>Audited &#x26; change-controlled</td></tr><tr><td>DR</td><td>Failover</td><td>Real replica</td><td>Restricted acesso</td></tr></tbody></table>
 
 **Promotion policy:** DEV → SIT → UAT → PRE-PROD → PROD\
-**Key rule:** Same implementação method across ambientes (IaC/Helm), with scaling differences only.
+**Key rule:** Same implementação method across ambientes (IaC/Helm), com scaling differences only.
 
 ***
 
-### 4. Network Zones & Trust Boundaries
+### 4. Rede Zones & Trust Boundaries
 
-The implementação is segmented into zones to reduce blast radius and enforce least privilege.
+The implementação is segmented into zones para reduce blast radius e enforce least privilege.
 
-#### 4.1 Recommended Zones
+#### 4.1 Recomendado Zones
 
-* **Public Zone (DMZ):**
+* **Público Zone (DMZ):**
   * Only what deve be internet-facing (e.g., público portals/APIs)
-  * Protected by WAF, TLS, and rate limits
+  * Protected by WAF, TLS, e rate limits
 * **Application Zone:**
-  * MOSIP application services, integration services, and internal APIs
+  * MOSIP application services, integration services, e internal APIs
 * **Data Zone:**
-  * Databases, object storage, backup repositories, KMS/HSM
+  * Databases, object storage, cópias de segurança repositories, KMS/HSM
 * **Admin Zone:**
   * Bastion, ops consoles, cluster management ferramentas
-  * MFA enforced and access logged
+  * MFA enforced e acesso logged
 * **Enrollment Edge:**
-  * Enrollment sites and secure connectivity to backend intake endpoints
+  * Enrollment locais e secure connectivity para backend intake endpoints
 
 #### 4.2 Exposure Principles
 
-* Private admin services are accessible only via **WireGuard** and/or **admin allowlists**
-* No direct access from the público zone to the data zone
-* Service-to-service communication uses TLS where necessários
+* Privado admin services are accessible only via **WireGuard** e/ou **admin allowlists**
+* Não existe acesso direto da zona pública para a zona de dados
+* Service-para-service communication uses TLS where required
 * All administrative actions deve be auditable
 
 ***
 
 ### 5. Integration Arquitetura (SIGA + Immigration)
 
-The Identificação Nacional platform integrates with external government systems through a controlled **Integration Layer**. This layer standardizes:
+A plataforma de Identificação Nacional integra-se com sistemas governamentais externos através de uma **Camada de Integração** controlada. Esta camada padroniza:
 
 * **Secure connectivity** (VPN/privado link, mTLS, IP allowlists)
-* **Authentication and authorization** (service accounts, token-based access)
-* **Schema validation and versioning**
-* **Retry and reconciliation** (idempotency, DLQ where applicable)
-* **Auditability** (all requests/changes logged and traceable)
+* **Authentication e authorization** (service accounts, token-based acesso)
+* **Schema validação e versioning**
+* **Retry e reconciliation** (idempotency, DLQ where applicable)
+* **Auditability** (all requests/changes logged e traceable)
 
 #### 5.1 Integration Patterns
 
-The following patterns may be used depending on the external system capability:
+Os seguintes padrões podem ser utilizados, dependendo das capacidades do sistema externo:
 
-* **Synchronous API calls (REST)** for real-time validation/lookup
-* **Asynchronous exchange (queue/event)** when decoupling and resilience are necessários
-* **Batch ETL/SFTP** for scheduled bulk sync (where APIs are not available or not stable)
+* **Synchronous API calls (REST)** para real-time validação/lookup
+* **Asynchronous exchange (queue/event)** when decoupling e resilience are required
+* **Batch ETL/SFTP** para scheduled bulk sync (where APIs are not available ou not stable)
 
 #### 5.2 SIGA Integration (Functional Scope)
 
-Typical scope of integration with SIGA includes:
+Typical scope of integration com SIGA inclui:
 
-* **Identity validation / cross-checks** during enrollment or adjudication (e.g., verifying existing civil registry data)
+* **Identity validação / cross-checks** during registo ou adjudication (e.g., verifying existing civil registry data)
 * **Reference data synchronization** (e.g., locations, administrative units, registries—where SIGA is the source of truth)
-* **Status updates** from Identificação Nacional to SIGA (e.g., “enrolled”, “issued”, “updated”, “deactivated”) based on agreed governance
+* **Status updates** from Nacional ID para SIGA (e.g., “enrolled”, “issued”, “updated”, “deactivated”) based on agreed governance
 * **Exception handling workflows** when discrepancies are found (manual review/adjudication)
 
-**Recommended Controls**
+**Recomendado Controls**
 
-* Define authoritative fields (MOSIP vs SIGA) and conflict resolution rules
-* Use idempotent update operations (avoid duplicate updates)
-* Maintain reconciliation reports (daily/weekly) to track mismatches and retries
+* Define authoritative fields (MOSIP vs SIGA) e conflict resolution rules
+* Utilize idempotent update operações (avoid duplicate updates)
+* Maintain reconciliation reports (daily/weekly) para track mismatches e retries
 
 #### 5.3 Immigration Integration (Functional Scope)
 
-Typical scope of integration with Immigration includes:
+Typical scope of integration com Immigration inclui:
 
-* **Foreigner/resident permit verification** during enrollment of non-citizens
-* **Status synchronization** (e.g., permit expiry, visa status changes) for lifecycle updates
-* **Border/entry workflows support** (as applicable), where Identificação Nacional verification is necessários for immigration operations
+* **Foreigner/resident permit verification** during registo of non-citizens
+* **Status synchronization** (e.g., permit expiry, visa status changes) para lifecycle updates
+* **Border/entry workflows support** (as applicable), where Nacional ID verification is required para immigration operações
 
-**Recommended Controls**
+**Recomendado Controls**
 
-* Strict access controls (least privilege) and purpose limitation
-* PII minimization (only exchange necessários attributes)
-* Strong audit trails for all queries and updates
+* Strict acesso controls (least privilege) e purpose limitation
+* PII minimization (only exchange required attributes)
+* Strong auditoria trails para all queries e updates
 * Time-bound caching rules (if caching is allowed)
 
-#### 5.4 Connectivity, Security, and Exposure
+#### 5.4 Connectivity, Segurança, e Exposure
 
-For both SIGA and Immigration integrations:
+For both SIGA e Immigration integrations:
 
-* Connectivity deverá be via **privado network** whenever feasible (VPN/MPLS/privado peering)
-* Use **mTLS** for service-to-service communications where supported
+* Connectivity deverá be via **privado rede** whenever feasible (VPN/MPLS/privado peering)
+* Utilize **mTLS** para service-para-service communications where supported
 * Enforce **IP allowlisting** at both ends
-* Use a dedicated **service account** per integration per ambiente
-* Apply rate limits and timeouts to protect MOSIP and external systems
+* Utilize a dedicated **service account** per integration per ambiente
+* Apply rate limits e timeouts para protect MOSIP e external systems
 
-#### 5.5 Error Handling and Reconciliation
+#### 5.5 Error Handling e Reconciliation
 
-* Define standard error codes and retry rules per integration
-* Implement idempotency keys for updates (where applicable)
-* Capture failures into a controlled retry queue or DLQ mechanism
+* Define standard error codes e retry rules per integration
+* Implement idempotency keys para updates (where applicable)
+* Capture failures into a controlled retry queue ou DLQ mechanism
 * Produce reconciliation reports:
   * records pending sync
-  * records failed sync (with reason)
-  * successful updates and timestamps
+  * records failed sync (com reason)
+  * successful updates e timestamps
 
 ***
 
-### 6. Core Data Flows (End-to-End)
+### 6. Core Data Flows (End-para-End)
 
 #### 6.1 Enrollment → Packet Submission
 
-1. Operator captures demographics, documents, and biometrics on the Registration Client
-2. Registration Client performs local validations and quality checks (as configured)
+1. Operator captures demographics, documents, e biometrics on the Registration Client
+2. Registration Client performs local validations e quality checks (as configured)
 3. Enrollment data is packaged as an encrypted/signed packet
-4. Packet is uploaded to backend intake (online or store-and-forward based on site model)
+4. Packet is uploaded para backend intake (online ou store-e-forward based on site model)
 
 #### 6.2 Packet Processing → SIGA/Immigration Cross-Checks (as configured)
 
-1. Registration Processor validates packet integrity and schema compliance
-2. Demographics and artifacts are extracted and staged
-3. Integration Layer triggers necessários lookups/validations against SIGA and/or Immigration
+1. Registration Processor validates packet integrity e schema conformidade
+2. Demographics e artifacts are extracted e staged
+3. Integration Layer triggers required lookups/validations against SIGA e/ou Immigration
 4. Workflow evaluates responses:
    * match/valid → continue
-   * discrepancy → exception/adjudication flow
-   * unavailable → queued retry or manual fallback as per SOP
+   * discrepancy → exception/adjudication fluxo
+   * unavailable → queued retry ou manual fallback as per SOP
 
 #### 6.3 Identity Finalization → Issuance
 
 1. Successful packets result in identity creation/finalization
-2. Identifier assignment and record creation in the Identity Repository
+2. Identifier assignment e record creation in the Identity Repository
 3. Issuance workflow triggers:
    * Print/card generation (if applicable)
    * Digital credential issuance (if applicable)
-4. Final status and audit logs are updated
+4. Final status e auditoria logs are updated
 
 #### 6.4 Verification / Authentication (if in scope)
 
-* Public verification checks the authenticity of printed credentials/documents
-* Relying parties use authenticated APIs (and eSignet, where applicable) for consent-based access
-* All verification events are logged and monitored
+* Público verification checks the authenticity of printed credentials/documents
+* Relying parties usar authenticated APIs (e eSignet, where applicable) para consent-based acesso
+* All verification events are logged e monitored
 
 ***
 
 ### 7. High-Level Component Inventory (MOSIP-Aligned)
 
-* Registration Client (field enrollment)
-* Packet intake and processing pipeline (Registration Processor)
+* Registration Client (field registo)
+* Packet intake e processing pipeline (Registration Processor)
 * Identity Repository services
-* Master data and admin configuration services
+* Master data e admin configuration services
 * Integration layer components (SIGA + Immigration connectors)
-* Keycloak (IAM) and admin access controls
-* eSignet (if enabled) for OIDC authentication/consent
+* Keycloak (IAM) e admin acesso controls
+* eSignet (if enabled) para OIDC authentication/consent
 * Observability stack (logs, metrics, alerts)
 * Data services: PostgreSQL, object storage, messaging, search/log store (as adopted)
 
@@ -232,8 +232,8 @@ For both SIGA and Immigration integrations:
 
 ### 8. Non-Functional Arquitetura Targets
 
-* **Security:** least privilege, encryption in transit and at rest, strong auditing, controlled admin access
-* **Availability:** HA for critical components; DR capability with defined RTO/RPO
-* **Scalability:** horizontal scaling for stateless services; capacity planning for data services
-* **Performance:** monitored p95 latency for key APIs and processing throughput targets
-* **Operability:** dashboards, runbooks, alerts, and maintenance processes
+* **Segurança:** least privilege, encryption in transit e at rest, strong auditing, controlled admin acesso
+* **Availability:** HA para critical components; DR capability com defined RTO/RPO
+* **Scalability:** horizontal scaling para stateless services; capacity planning para data services
+* **Performance:** monitored p95 latency para key APIs e processing throughput targets
+* **Operability:** dashboards, runbooks, alerts, e maintenance processes
