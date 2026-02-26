@@ -777,7 +777,7 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
          ```
     * **Option B: Copy to default config path**
         ```bash
-        cp $HOME/.kube/kube_config_cluster.yml $HOME/.kube/config
+        cp ~/k8s-infra/mosip/on-prem/kube_config_cluster.yml $HOME/.kube/config
         ``` 
     * **Option C: Export KUBECONFIG variable**
         ```bash
