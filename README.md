@@ -490,7 +490,7 @@ ansible-playbook -i hosts.ini docker.yaml
          ```
     * **Option B: Copy to default config path**
         ```bash
-        cp $HOME/.kube/kube_config_cluster.yml $HOME/.kube/rancher.conf
+        cp ~/k8s-infra/rancher/on-prem/kube_config_cluster.yml $HOME/.kube/rancher.conf
         ``` 
     * **Option C: Export KUBECONFIG variable**
         ```bash
