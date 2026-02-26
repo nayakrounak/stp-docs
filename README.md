@@ -281,7 +281,8 @@ git clone https://github.com/mosip/mosip-infra -b v1.2.0.2
       ```
       openssl version -a
       ```
-      ![alt text](openssl-version.png)
+      <img width="1254" height="234" alt="openssl-version" src="https://github.com/user-attachments/assets/b88fb1af-54bd-4c19-81ae-87a70e3d41bf" />
+
 
 ## On-Premises Deployment
 
