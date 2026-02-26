@@ -536,6 +536,8 @@ Once the RKE cluster is ready, an Ingress Controller and Storage Class must be c
     ```bash
     kubectl get all -n ingress-nginx
     ```
+    <img width="1254" height="234" alt="istio-ingress " src="https://github.com/user-attachments/assets/dbf2144e-e78d-4416-8281-f124f6527cf8" />
+
 ### 3.b. Storage Classes (longhorn)
 1.  **Navigate to the installation directory and install Pre-requisites:**
     ```
@@ -551,6 +553,7 @@ Once the RKE cluster is ready, an Ingress Controller and Storage Class must be c
     ```
     kubectl get all -n longhorn-system
     ```
+    <img width="1256" height="597" alt="longhorn-pods" src="https://github.com/user-attachments/assets/591dd77e-8e48-4d8f-89e8-1f5c610c9932" />
 
 ## 4. Setting up Nginx Server for Observation K8s Cluster
 
