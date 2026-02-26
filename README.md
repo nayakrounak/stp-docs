@@ -360,8 +360,8 @@ ghcr.io/linuxserver/wireguard
 > * Increase `-e PEERS=30` if more than 30 client configurations are needed.
 
 - Once WireGuard is installed, it will generate 30 peers, which must be used for the MOSIP deployment.
-![alt text](wireguard-docker-conatiner.png)
-![alt text](peer-wireguard.png)
+<img width="1298" height="125" alt="wireguard-docker-conatiner" src="https://github.com/user-attachments/assets/ddff7e7e-4fc4-495d-8b0e-19954dbe8246" />
+<img width="1298" height="125" alt="peer-wireguard" src="https://github.com/user-attachments/assets/477d7ffb-1a8b-4de7-853d-0c308dbacb33" />
 
 - Get inside your selected peer directory, and add mentioned changes in peer.conf:
 ```bash
