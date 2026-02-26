@@ -862,7 +862,7 @@ This contains necessary common details for applications across the MOSIP cluster
 3.  **Cluster Details:** Select **Generic** as the cluster type. Fill the **Cluster Name** field with a unique name (e.g., `mosip-sandbox`). Select **Create**.
 4.  **Execute Import Command:** Rancher will provide a `kubectl apply` command.
     * **Ensure Kubeconfig is set to the MOSIP Cluster.**
-    * Copy and execute the command from your PC:
+    * Copy and execute the command from your bastion:
         ```bash
         kubectl apply -f https://<rancher-host>/v3/import/<cluster-id>.yaml
         ```
