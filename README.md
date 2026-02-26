@@ -1058,13 +1058,12 @@ cd $INFRA_ROOT/deployment/v3/external/msg-gateway
      https://www.google.com/recaptcha/admin/create
     
    - Create captcha key for prereg domain (note: Replace the domain name of prereg in domain section)
-    ![alt text](prereg-ggogle-captcha-key.png)
-
+    <img width="1207" height="557" alt="prereg-ggogle-captcha-key" src="https://github.com/user-attachments/assets/735a3678-8667-4027-bd71-6992e07e10ca" />
    - Click on submit button it will create site-key and secret key noted down in notepad we have to use while deploying captcha.
-   ![alt text](captch-keys-for-prereg-domain.png)
+   <img width="1259" height="603" alt="captch-keys-for-prereg-domain" src="https://github.com/user-attachments/assets/5ce7d322-e7a9-40e3-bddc-f271c6cba4fc" />
+
    - Go to the setting and save it.
    - Create one more captch key for resident domain follow the same process that we did for prereg domain.
-   ![alt text](image-1.png)
 
 2. **Navigate to the installation directory &Execute the installation script :**
 
@@ -1122,7 +1121,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/artifactory
     vi install.sh
     ```
 3. **Add `--set metrics.enabled=false` because we did not deployed monitoring components:**
-![alt text](edit-keycloak.png)
+   <img width="1290" height="623" alt="edit-keycloak" src="https://github.com/user-attachments/assets/ba5c5a89-5163-4156-aa2b-30a8d8833b5b" />
 
 4. **Switch the branch to v1.2.0.2:**
 ```bash
@@ -1167,7 +1166,8 @@ cd $INFRA_ROOT/deployment/v3/mosip/kernel
 ```
 vi install.sh
 ```
-![alt text](Mock-biosdk.png)
+  <img width="1255" height="588" alt="Mock-biosdk" src="https://github.com/user-attachments/assets/e3881b97-b582-4868-ba71-79dbaaff77e2" />
+
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1182,7 +1182,8 @@ cd $INFRA_ROOT/deployment/v3/mosip/packetmanager
 ```
 vi install.sh
 ```
-![alt text](packet-manager.png)
+<img width="1255" height="588" alt="packet-manager" src="https://github.com/user-attachments/assets/dbcf289f-a7dc-4610-8d98-e8082389cc93" />
+
 
 **Execute the installation script:**
 ```
@@ -1198,7 +1199,8 @@ cd $INFRA_ROOT/deployment/v3/mosip/datashare
 ```
 vi install.sh
 ```
-![alt text](datashare.png)
+<img width="1255" height="588" alt="datashare" src="https://github.com/user-attachments/assets/4e9c25b1-73c8-438f-995e-20851c1b52df" />
+
 
 **Execute the installation script:**
 ```
@@ -1214,7 +1216,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/prereg
 ```
 vi install.sh
 ```
-![alt text](pre-reg.png)
+<img width="1255" height="588" alt="pre-reg" src="https://github.com/user-attachments/assets/ec3e0a32-e1b2-4aed-8619-70a4b9b42e29" />
 
 **Execute the installation script:**
 ```
@@ -1230,7 +1232,8 @@ cd $INFRA_ROOT/deployment/v3/mosip/idrepo
 ```
 vi install.sh
 ```
-![alt text](idrepo.png)
+<img width="1255" height="588" alt="idrepo" src="https://github.com/user-attachments/assets/c0157550-c1d2-4cf7-9f45-8eba2d53cd74" />
+
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1245,7 +1248,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/pms
 ```
 vi install.sh
 ```
-![alt text](pms.png)
+<img width="1255" height="588" alt="pms" src="https://github.com/user-attachments/assets/467bdf8d-33a0-497e-b498-f69d980533c5" />
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1260,7 +1263,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/mock-abis
 ```
 vi install.sh
 ```
-![alt text](mock-abis.png)
+<img width="1255" height="588" alt="mock-abis" src="https://github.com/user-attachments/assets/98877b1c-a6dc-4930-a1ed-cfd0d79de156" />
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1277,7 +1280,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/Mock-mv
 ```
 vi install.sh
 ```
-![alt text](mock-mv.png)
+<img width="1255" height="588" alt="mock-mv" src="https://github.com/user-attachments/assets/6cb09760-83b3-4a7b-ae06-5bdbdb404955" />
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1295,7 +1298,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/regproc
 ```
 vi install.sh
 ```
-![alt text](regproc.png)
+<img width="1255" height="588" alt="regproc" src="https://github.com/user-attachments/assets/06c2a79b-e78a-4c78-978b-61e015bebf82" />
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1311,7 +1314,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/admin
 ```
 vi install.sh
 ```
-![alt text](admin.png)
+<img width="1255" height="588" alt="admin" src="https://github.com/user-attachments/assets/060b44a2-c695-4185-a608-254cee53ae71" />
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1327,7 +1330,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/ida
 ```
 vi install.sh
 ```
-![alt text](ida.png)
+<img width="1255" height="588" alt="ida" src="https://github.com/user-attachments/assets/0bf8fbae-be18-495a-b1f5-f858d76ae947" />
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1343,7 +1346,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/print
 ```
 vi install.sh
 ```
-![alt text](print.png)
+<img width="1255" height="588" alt="print" src="https://github.com/user-attachments/assets/92a3f8d0-22e0-411b-bf49-62a19ae8b061" />
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1382,8 +1385,8 @@ cd $INFRA_ROOT/deployment/v3/mosip/resident
 ```
 vi install.sh
 ```
-![alt text](resident.png)
-![alt text](resident-api-correction.png)
+<img width="1255" height="588" alt="resident" src="https://github.com/user-attachments/assets/1de1c481-184a-4433-a2c2-3f44325924f7" />
+<img width="1255" height="588" alt="resident-api-correction" src="https://github.com/user-attachments/assets/3a885895-b4b0-490f-bc8e-3a84876ce5a5" />
 **Execute the installation script:**
 ```
 ./install.sh
