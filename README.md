@@ -1250,10 +1250,12 @@ cd $INFRA_ROOT/deployment/v3/mosip/pms
 vi install.sh
 ```
 <img width="1255" height="588" alt="pms" src="https://github.com/user-attachments/assets/467bdf8d-33a0-497e-b498-f69d980533c5" />
+
 **Execute the installation script:**
 ```
 ./install.sh
 ```
+
 #### 15. Mock ABIS
 
 **Navigate to the installation directory**
