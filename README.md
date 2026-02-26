@@ -1059,6 +1059,7 @@ cd $INFRA_ROOT/deployment/v3/external/msg-gateway
     
    - Create captcha key for prereg domain (note: Replace the domain name of prereg in domain section)
     <img width="1207" height="557" alt="prereg-ggogle-captcha-key" src="https://github.com/user-attachments/assets/735a3678-8667-4027-bd71-6992e07e10ca" />
+    
    - Click on submit button it will create site-key and secret key noted down in notepad we have to use while deploying captcha.
    <img width="1259" height="603" alt="captch-keys-for-prereg-domain" src="https://github.com/user-attachments/assets/5ce7d322-e7a9-40e3-bddc-f271c6cba4fc" />
 
