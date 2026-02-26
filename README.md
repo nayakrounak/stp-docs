@@ -633,13 +633,13 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
         ```
     * **Install Rancher:** Update the hostname in `rancher-values.yaml` using `vi` editor eg. rancher.credissure.com and execute:
     <img width="496" height="221" alt="update-rancher-vaule yml" src="https://github.com/user-attachments/assets/5449dbc3-cc7d-4e28-b85c-29a5f1514348" />
-        ```bash
-        helm install rancher rancher-latest/rancher \
-        --version 2.6.9 \
-        --namespace cattle-system \
-        --create-namespace \
-        -f rancher-values.yaml
-        ```
+      ```bash
+      helm install rancher rancher-latest/rancher \
+      --version 2.6.9 \
+      --namespace cattle-system \
+      --create-namespace \
+      -f rancher-values.yaml
+      ```
 2.  **Initial Login:**
     * Access the Rancher page via the browser (ensure Wireguard/VPN is connected).
     * Get the bootstrap password:
