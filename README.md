@@ -503,7 +503,7 @@ ansible-playbook -i hosts.ini docker.yaml
     ```bash
     kubectl get nodes
     ```
-    ![alt text](obs-node.png)
+    <img width="492" height="76" alt="obs-node" src="https://github.com/user-attachments/assets/2df935d5-7641-408a-bde1-9c461f31915c" />
 
 ## 3. Observation K8s Cluster Ingress, Storageclass setup
 
@@ -632,7 +632,7 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
         helm repo update
         ```
     * **Install Rancher:** Update the hostname in `rancher-values.yaml` using `vi` editor eg. rancher.credissure.com and execute:
-    ![alt text](update-rancher-vaule.yml.png)
+    <img width="496" height="221" alt="update-rancher-vaule yml" src="https://github.com/user-attachments/assets/5449dbc3-cc7d-4e28-b85c-29a5f1514348" />
         ```bash
         helm install rancher rancher-latest/rancher \
         --version 2.6.9 \
@@ -661,7 +661,8 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
         ```bash
         ./install.sh <keycloak.domain.name>
         ```
-     ![alt text](rancherkeycloak-install.png)
+     <img width="595" height="42" alt="rancherkeycloak-install" src="https://github.com/user-attachments/assets/df9b047b-5c97-4768-a3e5-7fb096f72d14" />
+
     * Switch the branch to v1.2.0.2:
         ```bash
         git checkout v1.2.0.2
@@ -678,12 +679,14 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
     ```bash
     ssh-keygen
     ```
-    ![alt text](bastion-ssh-keygen.png)
+    <img width="781" height="417" alt="bastion-ssh-keygen" src="https://github.com/user-attachments/assets/682bbe93-95ac-4316-a625-6bfc2c070848" />
+
 2.  **Copy the public keys of bastion host to remote observation node VM’s:**
     ```bash
      cat ~/.ssh/id_rsa.pub
     ```
-    ![alt text](copy-ssh-pub-key.png)
+    <img width="1299" height="155" alt="copy-ssh-pub-key" src="https://github.com/user-attachments/assets/fb666054-0a45-4e1a-8e92-3f12bd4f4750" />
+
 
 3.  **SSH into the observation node to check password-less SSH:**
     ```bash
@@ -699,7 +702,7 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
     ```
 6.  **Paste the public key content of the bastion host into the file and use :wq! to save the file:**
 
-![alt text](paste-pub-key-of-bastion.png)
+    <img width="1304" height="693" alt="paste-pub-key-of-bastion" src="https://github.com/user-attachments/assets/30d02cf6-ccc8-4e71-a408-8776c2084d61" />
 
 ### 6.2. Prepare and Execute Ansible Playbooks
 
@@ -710,7 +713,8 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
     ```bash
     cp hosts.ini.sample hosts.ini
     ```
-    ![alt text](update-ansible-inventory-1.png)
+    <img width="517" height="97" alt="update-ansible-inventory" src="https://github.com/user-attachments/assets/eb4c1e29-e3bb-4ef4-8906-0c544b089451" />
+
 #### 4. **To update host.ini use editor:**
 - Open the file using the following command:
 
@@ -785,7 +789,7 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
     ```bash
     kubectl get nodes
     ```
-    ![alt text](mosip-cluster-node.png)
+    <img width="612" height="157" alt="mosip-cluster-node" src="https://github.com/user-attachments/assets/adfac243-3a82-4b82-84ac-5d6ef6041d78" />
 
 ## 7. MOSIP K8 Cluster Global Configmap, Ingress and Storage Class setup
 
@@ -800,7 +804,7 @@ This contains necessary common details for applications across the MOSIP cluster
         cp global_configmap.yaml.sample global_configmap.yaml
         ```
 2. **Update domain in global configmap and correct the spelling of `signup` in global configmap:**
-![alt text](update-global-config-map.png)
+    <img width="656" height="539" alt="update-global-config-map" src="https://github.com/user-attachments/assets/ccf2c877-0ac0-43a8-bace-cd0bc0db0d61" />
 
 3.  Open the file using the following command:
 
