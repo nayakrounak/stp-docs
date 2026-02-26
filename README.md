@@ -1267,6 +1267,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/mock-abis
 vi install.sh
 ```
 <img width="1255" height="588" alt="mock-abis" src="https://github.com/user-attachments/assets/98877b1c-a6dc-4930-a1ed-cfd0d79de156" />
+
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1284,6 +1285,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/Mock-mv
 vi install.sh
 ```
 <img width="1255" height="588" alt="mock-mv" src="https://github.com/user-attachments/assets/6cb09760-83b3-4a7b-ae06-5bdbdb404955" />
+
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1302,6 +1304,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/regproc
 vi install.sh
 ```
 <img width="1255" height="588" alt="regproc" src="https://github.com/user-attachments/assets/06c2a79b-e78a-4c78-978b-61e015bebf82" />
+
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1318,6 +1321,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/admin
 vi install.sh
 ```
 <img width="1255" height="588" alt="admin" src="https://github.com/user-attachments/assets/060b44a2-c695-4185-a608-254cee53ae71" />
+
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1334,6 +1338,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/ida
 vi install.sh
 ```
 <img width="1255" height="588" alt="ida" src="https://github.com/user-attachments/assets/0bf8fbae-be18-495a-b1f5-f858d76ae947" />
+
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1350,6 +1355,7 @@ cd $INFRA_ROOT/deployment/v3/mosip/print
 vi install.sh
 ```
 <img width="1255" height="588" alt="print" src="https://github.com/user-attachments/assets/92a3f8d0-22e0-411b-bf49-62a19ae8b061" />
+
 **Execute the installation script:**
 ```
 ./install.sh
@@ -1390,6 +1396,7 @@ vi install.sh
 ```
 <img width="1255" height="588" alt="resident" src="https://github.com/user-attachments/assets/1de1c481-184a-4433-a2c2-3f44325924f7" />
 <img width="1255" height="588" alt="resident-api-correction" src="https://github.com/user-attachments/assets/3a885895-b4b0-490f-bc8e-3a84876ce5a5" />
+
 **Execute the installation script:**
 ```
 ./install.sh
