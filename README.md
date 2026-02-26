@@ -376,12 +376,13 @@ cat peer1.conf
     ```bash
     ssh-keygen
     ```
-    ![alt text](bastion-ssh-keygen.png)
+    <img width="781" height="417" alt="bastion-ssh-keygen" src="https://github.com/user-attachments/assets/4a231536-3511-45ed-80b0-04739a0ad737" />
+
 2.  **Copy the public keys of bastion host to remote observation node VM’s:**
     ```bash
      cat ~/.ssh/id_rsa.pub
     ```
-    ![alt text](copy-ssh-pub-key.png)
+    <img width="1299" height="155" alt="copy-ssh-pub-key" src="https://github.com/user-attachments/assets/62471c5b-d04f-4b8f-b82f-a42a4c0ffb31" />
 
 3.  **SSH into the observation node to check password-less SSH:**
     ```bash
@@ -397,8 +398,7 @@ cat peer1.conf
     ```
 6.  **Paste the public key content of the bastion host into the file and use :wq! to save the file:**
 
-![alt text](paste-pub-key-of-bastion.png)
-
+   <img width="1304" height="693" alt="paste-pub-key-of-bastion" src="https://github.com/user-attachments/assets/a185d9ad-d8c6-4af5-8a98-f1da8d79f3e6" />
 
 - Install Docker on Observation K8 Cluster node VM’s.
 
@@ -411,7 +411,8 @@ cat peer1.conf
     ```bash
     cp hosts.ini.sample hosts.ini
     ```
-    ![alt text](update-ansible-inventory-1.png)
+    <img width="517" height="97" alt="update-ansible-inventory" src="https://github.com/user-attachments/assets/4e3e8ff8-57ce-4340-a2f8-a989859a1fb6" />
+
 #### 3. **To update host.ini use editor:**
 - Open the file using the following command:
 
