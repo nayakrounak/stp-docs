@@ -1,6 +1,5 @@
 ## Table of Content
 - [Runbook for Mosip](#runbook-for-mosip)
-- [Architecture of Mosip deployment](#1-architecture-of-mosip-deployment)
 - [Difference in MOSIP Documentation vs Ooru Runbook for k8s cluster](#2-difference-in-mosip-documentation-vs-ooru-runbook-for-k8s-cluster)
     - [MOSIP Documentation](#mosip-documentation)
     - [Ooru Runbook](#ooru-runbook)
@@ -76,11 +75,10 @@
   Utilizes **active and verified OS images**, guaranteeing smooth, stable, and error-free deployment of all **MOSIP modules**.
 
 
-## 1) Architecture of Mosip deployment
 
 
 
-## 2) Difference in MOSIP Documentation vs Ooru Runbook for k8s cluster
+## 1) Difference in MOSIP Documentation vs Ooru Runbook for k8s cluster
 
 - ### **MOSIP Documentation**
      - The MOSIP External Module (Postgres) image used is deprecated it needs to be updated in the deployment script.
@@ -93,7 +91,7 @@
 
 
 
-## 3) Pre-Requisites 
+## 2) Pre-Requisites 
 
 ## Hardware requirements
 
