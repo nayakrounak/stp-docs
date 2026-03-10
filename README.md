@@ -205,11 +205,11 @@ git clone https://github.com/mosip/mosip-infra -b v1.2.0.2
        ```
        openssl version
        ```
-    - If it's not OpenSSL 1.1.1f, remove the existing OpenSSL
+    - If it's not OpenSSL 1.1.1s, remove the existing OpenSSL
       ```
       sudo apt remove openssl 
       ```
-    - Manually install OpenSSL 1.1.1f by following commands.
+    - Manually install OpenSSL 1.1.1s by following commands.
     - Install OpenSSL manually in Ubuntu
       ```
       sudo apt install build-essential checkinstall zlib1g-dev -y
