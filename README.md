@@ -629,7 +629,7 @@ The Nginx server acts as a reverse proxy for the cluster, handling TLS terminati
         ```
     * Add and update the Helm repository:
         ```bash
-        helm repo add rancher-latest [https://releases.rancher.com/server-charts/latest](https://releases.rancher.com/server-charts/latest)
+        helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
         helm repo update
         ```
     * **Install Rancher:** Update the hostname in `rancher-values.yaml` using `vi` editor eg. rancher.credissure.com and execute:
