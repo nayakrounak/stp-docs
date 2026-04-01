@@ -515,7 +515,7 @@ Once the RKE cluster is ready, an Ingress Controller and Storage Class must be c
 
 2.  **Add the Nginx Ingress Helm repository:**
     ```bash
-    helm repo add ingress-nginx [https://kubernetes.github.io/ingress-nginx](https://kubernetes.github.io/ingress-nginx)
+    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
     ```
 
 3.  **Update the Helm repositories:**
